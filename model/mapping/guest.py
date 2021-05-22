@@ -1,9 +1,9 @@
-from model.mapping import Base
+from model.mapping import Base_g
 import uuid
 
 from sqlalchemy import Column, String, UniqueConstraint , Integer
 
-class Guest(Base):
+class Guest(Base_g):
     __tablename__ = 'guest'
     __table_args__ = (UniqueConstraint('horaires', 'lieu','id_personne'),)
 
