@@ -22,8 +22,8 @@ from vue.menu import MenuWindow
 class WindowManager:
 
     def __init__(self):
-        self.data_pers = None
-        self.data_guest = None
+        self.data_pers = {}
+        self.data_guest = {}
         self.guest_inscription_window = None
         self.confirm_data_window = None
 
@@ -57,12 +57,14 @@ class WindowManager:
         if self.ui.visiteur_choice.isChecked() is True:
             self.statut_personne = "visiteur"
 
+        print("out of inscription splitter")
+
     def close_inscription(self):
         self.confirm_data_window.close()
         self.guest_inscription_window.close()
 
     def submit_inscription(self):
-
+        print("submit_inscription")
         # guest data
         self.data_guest["horaires"] = self.ui_guest.time_visite.time()
         self.data_guest["lieu"] = self.ui_guest.visite_choice.currentText()
@@ -74,8 +76,9 @@ class WindowManager:
         self.data_pers["email"] = self.ui.email_input.text()
         self.data_pers["mdp"] = self.ui.mdp_input.text()
         self.data_pers["statut"] = self.statut_personne
-
+        print(self.data_guest)
         guest_database.create_guest(self.data_guest, self.data_pers)
+
         self.close_inscription()
         self.main_widget.close()
 
@@ -83,6 +86,31 @@ class WindowManager:
 
 
     def confirm_data_window_func (self):
+        print("submit_inscription")
+        # guest data
+        print(self.ui_guest.visite_choice.currentText())
+        print(self.data_guest)
+
+        self.data_guest["horaires"] = self.ui_guest.time_visite.time()
+        self.data_guest["lieu"] = self.ui_guest.visite_choice.currentText()
+        print("test")
+        print(self.data_guest)
+        # person data
+        self.data_pers["firstname"] = self.ui.prenom_input.text()
+        self.data_pers["lastname"] = self.ui.prenom_input.text()
+        self.data_pers["age"] = self.ui.comboBox.currentText()
+        self.data_pers["email"] = self.ui.email_input.text()
+        self.data_pers["mdp"] = self.ui.mdp_input.text()
+        self.data_pers["statut"] = self.statut_personne
+
+        guest_database.create_guest(self.data_guest, self.data_pers)
+        print("oui")
+
+        self.close_inscription()
+        self.main_widget.close()
+
+
+
         self.confirm_data_window = confirm_data.QtWidgets.QWidget()
         self.ui_confirm_data = confirm_data.Ui_Form()
         self.ui_confirm_data.setupUi(self.confirm_data_window)
@@ -103,6 +131,9 @@ class WindowManager:
 database_engine = DatabaseEngine(url='sqlite:///inscription.db')
 database_engine.create_database()
 guest_database = guest_controller.GuestController(database_engine)
+
+
+
 main_app = acceuil.QtWidgets.QApplication(sys.argv)
 
 main_window = WindowManager()

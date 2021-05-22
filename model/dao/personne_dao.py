@@ -36,7 +36,7 @@ class PersonneDAO(DAO):
 
     def create(self, data: dict):
         try:
-            member = Personne(firstname=data.get('firstname'), lastname=data.get('lastname'),age=data.get('age'), email=data.get('email'), statut=data.get('statut'),mdp=data.get("mdp"))
+            member = Personne(firstname=data.get('firstname'), lastname=data.get('lastname'),age=data.get('age'), email=data.get('email'), statut=data.get('statut'), mdp=data.get("mdp"))
             self._database_session.add(member)
             self._database_session.flush()
         except IntegrityError:

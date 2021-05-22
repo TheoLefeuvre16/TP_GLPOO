@@ -1,7 +1,9 @@
 from model.mapping import Base
 import uuid
 
+
 from sqlalchemy import Column, String, UniqueConstraint , Integer
+
 
 class Personne(Base):
     __tablename__ = 'personne'
@@ -14,7 +16,7 @@ class Personne(Base):
     age = Column(Integer, nullable=False)
     email = Column(String(256), nullable=False)
     statut = Column(String(50), nullable=False)
-    mdp = Column(String(50),nullable=False)
+    mdp = Column(String(50), nullable=False)
 
     def __repr__(self):
         return "<Personne n°%s (%s %s %d %s %s %s)>" % (self.id, self.firstname, self.lastname.upper(),self.age, self.email , self.statut, self.mdp)

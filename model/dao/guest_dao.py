@@ -42,10 +42,11 @@ class GuestDAO(DAO):
             raise ResourceNotFound()
 
     def create(self, data: dict):
+        print("call create")
         try:
             member = Guest(horaires=data.get('horaire'), lieu=data.get('lieu'),id_personne=data.get('id_personne'))
-            self._database_session.add(member)
-            self._database_session.flush()
+            #self._database_session.add(member)
+            #self._database_session.flush()
         except IntegrityError:
             raise Error("Member already exists")
         return member
