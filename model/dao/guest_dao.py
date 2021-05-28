@@ -17,13 +17,13 @@ class GuestDAO(DAO):
 
     def get(self, id):
         try:
-            return self._database_session.query(Guest).filter_by(id=id).order_by(Guest.firstname).one()
+            return self._database_session.query(Guest).filter_by(id=id).order_by(Guest.id).one()
         except NoResultFound:
             raise ResourceNotFound()
 
     def get_all(self):
         try:
-            return self._database_session.query(Guest).order_by(Guest.firstname).all()
+            return self._database_session.query(Guest).order_by(Guest.id).all()
         except NoResultFound:
             raise ResourceNotFound()
 
@@ -44,9 +44,14 @@ class GuestDAO(DAO):
     def create(self, data: dict):
         print("call create")
         try:
-            member = Guest(horaires=data.get('horaire'), lieu=data.get('lieu'),id_personne=data.get('id_personne'))
-            #self._database_session.add(member)
-            #self._database_session.flush()
+            tmp = "oui"
+            #member = Guest(horaires=data.get('horaires'), lieu=data.get('lieu'),id_personne=data.get('id_personne'))
+            member = Guest(horaires=tmp, lieu=data.get('lieu'), id_personne=data.get('id_personne'))
+            print("member :")
+            self._database_session.add(member)
+            self._database_session.flush()
+            print("flush")
+            print(member.to_dict())
         except IntegrityError:
             raise Error("Member already exists")
         return member

@@ -46,7 +46,7 @@ class WindowManager:
             self.ui_guest = guest_inscription.Ui_Form()
             self.ui_guest.setupUi(self.guest_inscription_window)
             self.ui_guest.precedent_button.clicked.connect(self.previous_page_guest_inscription)
-            self.ui_guest.submit_guest.clicked.connect(self.confirm_data_window_func)
+            self.ui_guest.submit_guest.clicked.connect(self.submit_inscription)
             self.statut_personne = "guest"
             self.guest_inscription_window.show()
 
@@ -60,7 +60,7 @@ class WindowManager:
         print("out of inscription splitter")
 
     def close_inscription(self):
-        self.confirm_data_window.close()
+        #self.confirm_data_window.close()
         self.guest_inscription_window.close()
 
     def submit_inscription(self):
@@ -71,14 +71,16 @@ class WindowManager:
 
         # person data
         self.data_pers["firstname"] = self.ui.prenom_input.text()
-        self.data_pers["lastname"] = self.ui.prenom_input.text()
+        self.data_pers["lastname"] = self.ui.nom_input.text()
         self.data_pers["age"] = self.ui.comboBox.currentText()
         self.data_pers["email"] = self.ui.email_input.text()
         self.data_pers["mdp"] = self.ui.mdp_input.text()
         self.data_pers["statut"] = self.statut_personne
         print(self.data_guest)
         guest_database.create_guest(self.data_guest, self.data_pers)
-
+        db = guest_database.list_guest()
+        print("oui")
+        print(db)
         self.close_inscription()
         self.main_widget.close()
 
@@ -97,14 +99,14 @@ class WindowManager:
         print(self.data_guest)
         # person data
         self.data_pers["firstname"] = self.ui.prenom_input.text()
-        self.data_pers["lastname"] = self.ui.prenom_input.text()
+        self.data_pers["lastname"] = self.ui.nom_input.text()
         self.data_pers["age"] = self.ui.comboBox.currentText()
         self.data_pers["email"] = self.ui.email_input.text()
         self.data_pers["mdp"] = self.ui.mdp_input.text()
         self.data_pers["statut"] = self.statut_personne
 
         guest_database.create_guest(self.data_guest, self.data_pers)
-        print("oui")
+
 
         self.close_inscription()
         self.main_widget.close()

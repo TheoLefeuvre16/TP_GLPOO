@@ -1,9 +1,9 @@
-from model.mapping import Base_g
+from model.mapping import Base
 import uuid
 
-from sqlalchemy import Column, String, UniqueConstraint , Integer
+from sqlalchemy import Column, String, UniqueConstraint, Integer
 
-class Guest(Base_g):
+class Guest(Base):
     __tablename__ = 'guest'
     __table_args__ = (UniqueConstraint('horaires', 'lieu','id_personne'),)
 
@@ -14,7 +14,7 @@ class Guest(Base_g):
     id_personne = Column(Integer, nullable=False)
 
     def __repr__(self):
-        return "<guest  n°%s (%s %s %d )>" % (self.id, self.horaires, self.lieu , self.id_personne)
+        return "<guest  n°%s (%s %s %d )>" % (self.id, self.horaires, self.lieu, self.id_personne)
 
     def to_dict(self):
         return {

@@ -1,17 +1,17 @@
 import re
 
+from controller.personne_controller import PersonneController
 from model.dao.guest_dao import GuestDAO
 from model.dao.personne_dao import PersonneDAO
 from exceptions import Error, InvalidData
-
-class GuestController():
+class GuestController(PersonneController):
 
     """
     Guest actions
     """
 
     def __init__(self, database_engine):
-        self._database_engine = database_engine
+        super().__init__(database_engine)
         self._frames = []
 
 
@@ -38,9 +38,7 @@ class GuestController():
                 personne_data = personne.to_dict()
                 print(personne_data)
                 data_guest['id_personne'] = personne_data.get('id')
-                print(data_guest)
                 guest = GuestDAO(session).create(data_guest)
-                #print(guest)
                 guest_data = guest.to_dict()
                 print(guest_data)
                 print("exiting create_guest")
