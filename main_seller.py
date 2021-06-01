@@ -59,9 +59,3 @@ if __name__ == "__main__":
 
 
 
-
-def run():
-    database_engine = DatabaseEngine(url='sqlite:///shop.db')
-    database_engine.create_database()
-    seller_controller = SellerController(database_engine)
-    app = QApplication(sys.argv)

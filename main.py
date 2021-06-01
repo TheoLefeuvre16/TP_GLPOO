@@ -2,8 +2,10 @@ import sys
 import acceuil
 import guest_inscription
 import confirm_data
-from controller import guest_controller
+from controller import guest_controller, seller_controller
 from model.database import DatabaseEngine
+import billetterie
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 '''
 from controller.member_controller import MemberController
@@ -24,7 +26,9 @@ class WindowManager:
     def __init__(self):
         self.data_pers = {}
         self.data_guest = {}
+        self.data_visiteur = {}
         self.guest_inscription_window = None
+        self.visiteur_inscription_window = None
         self.confirm_data_window = None
 
         # inscription main page
@@ -55,7 +59,16 @@ class WindowManager:
             self.statut_personne = "vendeur"
         # Visiteur
         if self.ui.visiteur_choice.isChecked() is True:
+            print("select visiteur")
             self.statut_personne = "visiteur"
+            #ouvrir une fenêtre de choix de billet
+            self.visiteur_inscription_window = QtWidgets.QWidget()
+            self.ui_visiteur = billetterie.Ui_MainWindow()
+            print("print")
+            self.ui_visiteur.setupUi(self.visiteur_inscription_window)
+            self.ui_visiteur.valid_ticket.clicked.connect(self.submit_visiteur)
+            print("setup ??")
+            self.visiteur_inscription_window.show()
 
         print("out of inscription splitter")
 
@@ -84,6 +97,37 @@ class WindowManager:
         self.close_inscription()
         self.main_widget.close()
 
+    def submit_visiteur(self):
+        print("submit visiteur")
+        print("index : ", self.ui_visiteur.comboBox_billets.currentIndex())
+
+        print(int(self.ui.comboBox.currentText()))
+        if int(self.ui.comboBox.currentText()) <= 18 and self.ui_visiteur.comboBox_billets.currentIndex() == 0:
+            print("ticket -18")
+            self.data_visiteur["age"] = "0"
+            self.data_visiteur["stand"] = "1"
+            self.data_visiteur["guest"] = "1"
+        if self.ui_visiteur.comboBox_billets.currentIndex() == 1:
+            self.data_visiteur["age"] = "1"
+            self.data_visiteur["guest"] = "1"
+            self.data_visiteur["stand"] = "0"
+        if self.ui_visiteur.comboBox_billets.currentIndex() == 2:
+            self.data_visiteur["age"] = "1"
+            self.data_visiteur["stand"] = "1"
+            self.data_visiteur["guest"] = "0"
+        if self.ui_visiteur.comboBox_billets.currentIndex() == 3:
+            self.data_visiteur["age"] = "1"
+            self.data_visiteur["stand"] = "1"
+            self.data_visiteur["guest"] = "1"
+        print("toprint")
+        print("age " + self.data_visiteur["age"])
+        print(" guest " + self.data_visiteur["guest"] + " stand " + self.data_visiteur["stand"])
+        self.data_pers["firstname"] = self.ui.prenom_input.text()
+        self.data_pers["lastname"] = self.ui.nom_input.text()
+        self.data_pers["age"] = self.ui.comboBox.currentText()
+        self.data_pers["email"] = self.ui.email_input.text()
+        self.data_pers["mdp"] = self.ui.mdp_input.text()
+        self.data_pers["statut"] = self.statut_personne
 
 
 
