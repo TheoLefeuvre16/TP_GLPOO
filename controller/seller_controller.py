@@ -38,7 +38,7 @@ class SellerController:
     def delete_article(self, guest_id):
         with self._database_engine.new_session() as session:
             article_dao = SellerDAO(session)
-            article = article_dao.get(guest_id)
+            article = article_dao.get_id_article(guest_id)
             article_dao.delete(article)
 
     def create_seller(self, data_seller, data_personne):
@@ -63,7 +63,7 @@ class SellerController:
 
     def get_seller(self, member_id):
         with self._database_engine.new_session() as session:
-            seller = SellerDAO(session).get(member_id)
+            seller = SellerDAO(session).get_id_seller(member_id)
             seller_data = seller.to_dict()
         return seller_data
 
