@@ -38,10 +38,9 @@ class SellerDAO(DAO):
 
     def create_seller(self, data: dict):
         try:
-            member = Seller(money=0)
+            member = Seller(money=0,id_personne=data.get('id_personne'))
             self._database_session.add(member)
             self._database_session.flush()
-            print(member.to_dict())
         except IntegrityError:
             raise Error("Seller already exists")
         return member
