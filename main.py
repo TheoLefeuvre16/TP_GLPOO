@@ -14,15 +14,6 @@ from PySide6.QtWidgets import QApplication
 from vue.menu import MenuWindow
 '''
 
-
-
-
-
-
-
-
-
-
 database_engine = DatabaseEngine(url='sqlite:///inscription.db')
 database_engine.create_database()
 guest_database = guest_controller.GuestController(database_engine)
