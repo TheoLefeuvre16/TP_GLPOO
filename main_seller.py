@@ -33,14 +33,18 @@ class WindowManager:
 
     def add_article_function(self):
         data = {'name': self.ui_article.lineEdit.text(),
-                'price': self.ui_article.lineEdit_2.text(),
-                'stock': self.ui_article.lineEdit_3.text()
+                'price': int(self.ui_article.lineEdit_2.text()),
+                'stock': int(self.ui_article.lineEdit_3.text()),
+                'id_seller': int(self.ui_article.lineEdit_3.text())+1
                 }
         print(data)
-        self._seller_controller.add_article(data)
 
+        self._seller_controller.add_article(data)
+        self.add_article_window.close()
     def close_add_window(self):
         self.add_article_window.close()
+
+
 if __name__ == "__main__":
     database_engine = DatabaseEngine(url='sqlite:///articles.db')
     database_engine.create_database()
