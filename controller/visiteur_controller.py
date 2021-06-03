@@ -23,14 +23,14 @@ class VisiteurController(PersonneController):
         print("entering create_visiteur")
        # self._check_profile_data(data)
         try:
-            with self._database_engine_p.new_session() as session:
+            with self._database_engine.new_session() as session:
                 # Save member in database
                 print("with ok")
                 personne = PersonneDAO(session).create(data_personne)
                 personne_data = personne.to_dict()
                 print(personne_data)
                 data_visiteur['id_personne'] = personne_data.get('id')
-
+                print(data_visiteur)
                 visiteur = VisiteurDAO(session).create(data_visiteur)
                 visiteur_data = visiteur.to_dict()
                 print(visiteur_data)
@@ -65,16 +65,24 @@ class VisiteurController(PersonneController):
 
     #lister les stands = vendeurs
     def list_seller(self):
+
         with self._database_engine.new_session() as session:
-            seller_dao = SellerDAO(session)
+            seller_dao = SellerDAO(session).get_all()
             return seller_dao.to_dict()
 
     #lister les lieux -> skip
     #afficher l'emploi du temps = lister les guests
     def list_guests(self):
         with self._database_engine.new_session() as session:
-            guest_dao = GuestDAO(session)
-            return guest_dao.to_dict()
+            guests = GuestDAO(session).get_all()
+            guests_data = [guest.to_dict() for guest in guests]
+        return guests_data
+
+    def get_guests(self, guests_id):
+        with self._database_engine.new_session() as session:
+            guest = PersonneDAO(session).get(guests_id)
+            guest_data = guest.to_dict()
+        return guest_data
 
     #lister les articles d'un stand
     def list_article_from_seller(self, seller):
@@ -104,3 +112,6 @@ class VisiteurController(PersonneController):
 
     def validate_cart(self):
         self.panier.clear()
+
+    def show_cart(self):
+        return self.panier
