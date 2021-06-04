@@ -3,10 +3,17 @@ import guest_inscription
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
 from view.Visiteur import interface_visiteur_connecte
+from view import seller_menu, add_article
 
 class WindowManager:
 
-    def __init__(self, guest_database, visiteur_database):
+    def __init__(self, guest_database, visiteur_database, seller_database):
+        self.add_article_window = None
+        self.del_article_window = None
+        self.display_money = None
+        self.display_stands = None
+
+        self._seller_controller = seller_database
         self.guest_database = guest_database
         self.visiteur_database = visiteur_database
         self.data_pers = {}
@@ -49,6 +56,12 @@ class WindowManager:
             #self.ui_test.setupUi(self.test_w, self.visiteur_database)
             #print("after setup")
             #self.test_w.show()
+            # main page
+            self.main_widget = seller_menu.QtWidgets.QWidget()
+            self.ui_seller = seller_menu.Ui_MainWindow()
+            self.ui_seller.setupUi(self.main_widget)
+            self.ui_seller.pushButton_2.clicked.connect(self.article_window)
+            self.main_widget.show()
 
 
         # Visiteur
@@ -95,24 +108,22 @@ class WindowManager:
         print(int(self.ui.comboBox.currentText()))
         if int(self.ui.comboBox.currentText()) <= 18 and self.ui_visiteur.comboBox_billets.currentIndex() == 0:
             print("ticket -18")
-            self.data_visiteur["age"] = "0"
-            self.data_visiteur["stand"] = "1"
-            self.data_visiteur["guest"] = "1"
+            self.data_visiteur["age"] = 0
+            self.data_visiteur["stand"] = 1
+            self.data_visiteur["guest"] = 1
         if self.ui_visiteur.comboBox_billets.currentIndex() == 1:
-            self.data_visiteur["age"] = "1"
-            self.data_visiteur["guest"] = "1"
-            self.data_visiteur["stand"] = "0"
+            self.data_visiteur["age"] = 1
+            self.data_visiteur["guest"] = 1
+            self.data_visiteur["stand"] = 0
         if self.ui_visiteur.comboBox_billets.currentIndex() == 2:
-            self.data_visiteur["age"] = "1"
-            self.data_visiteur["stand"] = "1"
-            self.data_visiteur["guest"] = "0"
+            self.data_visiteur["age"] = 1
+            self.data_visiteur["stand"] = 1
+            self.data_visiteur["guest"] = 0
         if self.ui_visiteur.comboBox_billets.currentIndex() == 3:
-            self.data_visiteur["age"] = "1"
-            self.data_visiteur["stand"] = "1"
-            self.data_visiteur["guest"] = "1"
-        print("toprint")
-        print("age " + self.data_visiteur["age"])
-        print(" guest " + self.data_visiteur["guest"] + " stand " + self.data_visiteur["stand"])
+            self.data_visiteur["age"] = 1
+            self.data_visiteur["stand"] = 1
+            self.data_visiteur["guest"] = 1
+
         self.data_pers["firstname"] = self.ui.prenom_input.text()
         self.data_pers["lastname"] = self.ui.nom_input.text()
         self.data_pers["age"] = self.ui.comboBox.currentText()
@@ -167,3 +178,25 @@ class WindowManager:
             "statut : " + self.statut_personne + "\n" +
             "-----------------------------------------\n"
         )
+
+    def article_window(self):
+        self.add_article_window = add_article.QtWidgets.QWidget()
+        self.ui_article = add_article.Ui_MainWindow()
+        self.ui_article.setupUi(self.add_article_window)
+        self.ui_article.pushButton.clicked.connect(self.add_article_function)
+        self.ui_article.pushButton_2.clicked.connect(self.close_add_window)
+        self.add_article_window.show()
+
+    def add_article_function(self):
+        data = {'name': self.ui_article.lineEdit.text(),
+                'price': int(self.ui_article.lineEdit_2.text()),
+                'stock': int(self.ui_article.lineEdit_3.text()),
+                'id_seller': int(self.ui_article.lineEdit_3.text())+1
+                }
+        print(data)
+
+        self._seller_controller.add_article(data)
+        self.add_article_window.close()
+
+    def close_add_window(self):
+        self.add_article_window.close()

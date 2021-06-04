@@ -1,6 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-
+import uuid
 from model.mapping.personne import Personne
 from model.dao.dao import DAO
 
@@ -36,11 +36,11 @@ class PersonneDAO(DAO):
 
     def create(self, data: dict):
         try:
-            member = Personne(firstname=data.get('firstname'), lastname=data.get('lastname'),age=data.get('age'), email=data.get('email'), statut=data.get('statut'), mdp=data.get("mdp"))
-            print("flush broken ?")
+            data['id']=str(uuid.uuid4())
+            print(data['id'])
+            member = Personne(id=data.get('id'), firstname=data.get('firstname'), lastname=data.get('lastname'),age=data.get('age'), email=data.get('email'), statut=data.get('statut'), mdp=data.get("mdp"))
             self._database_session.add(member)
             self._database_session.flush()
-            print("ah non")
         except IntegrityError:
             raise Error("Member already exists")
         return member
