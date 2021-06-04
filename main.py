@@ -1,11 +1,14 @@
 import sys
 import acceuil
 import guest_inscription
+import main_seller
 import confirm_data
 from controller import guest_controller, seller_controller
 from model.database import DatabaseEngine
 import billetterie
 from PyQt5 import QtCore, QtGui, QtWidgets
+from view import seller_menu, add_article
+from controller.seller_controller import SellerController
 
 '''
 from controller.member_controller import MemberController
@@ -29,7 +32,14 @@ class WindowManager:
         self.data_visiteur = {}
         self.guest_inscription_window = None
         self.visiteur_inscription_window = None
+        self.seller_inscription_window = None
         self.confirm_data_window = None
+
+        #seller
+        self.add_article_window = None
+        self.del_article_window = None
+        self.display_money = None
+        self.display_stands = None
 
         # inscription main page
         self.main_widget = acceuil.QtWidgets.QWidget()
@@ -38,12 +48,32 @@ class WindowManager:
         self.ui.submit.clicked.connect(self.Inscriptions_splitter)
         self.main_widget.show()
 
+    def article_window(self):
+        self.add_article_window = add_article.QtWidgets.QWidget()
+        self.ui_article = add_article.Ui_MainWindow()
+        self.ui_article.setupUi(self.add_article_window)
+        self.ui_article.pushButton.clicked.connect(self.add_article_function)
+        self.ui_article.pushButton_2.clicked.connect(self.close_add_window)
+        self.add_article_window.show()
+
+    def add_article_function(self):
+        data = {'name': self.ui_article.lineEdit.text(),
+                'price': int(self.ui_article.lineEdit_2.text()),
+                'stock': int(self.ui_article.lineEdit_3.text()),
+                'id_seller': int(self.ui_article.lineEdit_3.text())+1
+                }
+
+        seller_controller.add_article(data)
+        self.add_article_window.close()
+
+    def close_add_window(self):
+        self.add_article_window.close()
+
     # go back
     def previous_page_guest_inscription(self):
         self.guest_inscription_window.close()
 
     def Inscriptions_splitter(self):
-
         # Guest
         if self.ui.guest_choice.isChecked() is True:
             self.guest_inscription_window = guest_inscription.QtWidgets.QWidget()
@@ -56,7 +86,14 @@ class WindowManager:
 
         # Vendeur
         if self.ui.vendeur_choice.isChecked() is True:
+            self.main_widget.close()
+            self.seller_inscription_window = seller_menu.QtWidgets.QWidget()
+            self.ui_seller = seller_menu.Ui_MainWindow()
+            self.ui_seller.setupUi( self.seller_inscription_window)
+            self.ui_seller.pushButton_2.clicked.connect(self.article_window)
             self.statut_personne = "vendeur"
+            self.seller_inscription_window.show()
+
         # Visiteur
         if self.ui.visiteur_choice.isChecked() is True:
             print("select visiteur")
@@ -178,6 +215,7 @@ database_engine = DatabaseEngine(url='sqlite:///inscription.db')
 database_engine.create_database()
 guest_database = guest_controller.GuestController(database_engine)
 
+seller_controller = SellerController(database_engine)
 
 
 main_app = acceuil.QtWidgets.QApplication(sys.argv)

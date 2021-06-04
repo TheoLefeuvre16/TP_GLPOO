@@ -17,7 +17,6 @@ class SellerController:
             with self._database_engine.new_session() as session:
                 article = SellerDAO(session).create_article(data)
                 article_data = article.to_dict()
-                print(SellerDAO(session).get_all())
 
                 return article_data
         except Error as e:
