@@ -12,7 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow, visiteur_controller):
+
+    def setupUi(self, MainWindow, visiteur_controller, seller_id):
+        self.visiteur_controller = visiteur_controller
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(347, 390)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -24,27 +26,26 @@ class Ui_MainWindow(object):
         self.valid_article_button = QtWidgets.QPushButton(self.centralwidget)
         self.valid_article_button.setGeometry(QtCore.QRect(130, 270, 91, 23))
         self.valid_article_button.setObjectName("valid_article_button")
-        self.valid_article_button.clicked.connect(self.add(visiteur_controller))
+        self.valid_article_button.clicked.connect(self.add)
 
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
-        self.member_mapping = {}
+        self.member_mapping = []
         self.layout = QtWidgets.QHBoxLayout()
 
-        self.list(visiteur_controller)
+        self.list(seller_id)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def list(self, visiteur_controller, seller_id):
+    def list(self, seller_id):
         index = 0
-
-        for article in visiteur_controller.list_articles():
+        for article in self.visiteur_controller.list_article_from_seller(seller_id):
             print(article['id_seller'])
             if seller_id == article['id_seller']:
                 self.list_article_widget.insertItem(index, "* %s" % (
                     article['name']))
-                self.member_mapping[index] = article
+                self.member_mapping.append(article)
                 index += 1
 
         self.list_article_widget.resize(self.list_article_widget.sizeHint())
@@ -52,12 +53,15 @@ class Ui_MainWindow(object):
         self.listlayout.addWidget(self.listwidget)
         self.layout.addLayout(self.listlayout)
 
-    def add(self, visiteur_controller):
-        print(self.list_article_widget.currentRow())
-        print(self.member_mapping[self.list_article_widget.currentRow()]['id'])
-        visiteur_controller.add_to_cart(self.member_mapping[self.list_article_widget.currentRow()]['name'], 1)
+    def add(self):
+        try:
+            print(self.list_article_widget.currentRow())
+            print(self.member_mapping[self.list_article_widget.currentRow()]['id'])
+            self.visiteur_controller.add_to_cart(self.member_mapping[self.list_article_widget.currentRow()]['name'], 1)
+        except:
+            print("pas d'article sélectionné")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.valid_article_button.setText(_translate("MainWindow", "Voir les articles"))
+        self.valid_article_button.setText(_translate("MainWindow", "Ajouter au panier"))

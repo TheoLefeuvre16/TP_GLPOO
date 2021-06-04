@@ -26,6 +26,7 @@ class Ui_MainWindow(object):
         self.valid_seller_button.setGeometry(QtCore.QRect(130, 270, 91, 23))
         self.valid_seller_button.setObjectName("valid_seller_button")
         self.valid_seller_button.clicked.connect(self.clicked)
+
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
         print("seller - half setup")
@@ -51,7 +52,7 @@ class Ui_MainWindow(object):
             self.member_mapping[index] = member
             index += 1
 
-        self.list_seller_widget.clicked.connect(self.clicked)
+
         self.list_seller_widget.resize(self.list_seller_widget.sizeHint())
         self.list_seller_widget.move(0, 60)
         self.listlayout.addWidget(self.listwidget)
@@ -64,7 +65,7 @@ class Ui_MainWindow(object):
         print("vendeur - test")
         self.test_w = QtWidgets.QWidget()
         self.ui_test = list_article.Ui_MainWindow()
-        self.ui_test.setupUi(self.test_w, self.database)
+        self.ui_test.setupUi(self.test_w, self.database, self.member_mapping[self.list_seller_widget.currentRow()]['id'])
         self.test_w.show()
 
     def retranslateUi(self, MainWindow):
