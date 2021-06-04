@@ -24,7 +24,7 @@ class WindowManager:
         self.connection_widget = connection.QtWidgets.QWidget()
         self.ui_connection = connection.Ui_MainWindow()
         self.ui_connection.setupUi(self.connection_widget)
-        #self.ui_connection.valider_connection.clicked.connect()
+        self.ui_connection.valider_connection.clicked.connect(self.valider_connexion)
         self.ui_connection.inscription.clicked.connect(self.Inscription_window)
         self.connection_widget.show()
 
@@ -180,3 +180,26 @@ class WindowManager:
         self.visiteur_database.create_visiteur(self.data_visiteur, self.data_pers)
         print("tout roule")
 
+    def valider_connexion(self):
+
+        print(self.ui_connection.mail_input.text())
+        mail_input = self.ui_connection.mail_input.text()
+        mdp_input = self.ui_connection.mdp_input.text()
+
+        db_guest = self.guest_database.list_guest()
+        for member in db_guest:
+            nom = self.visiteur_database.get_guests(member['id_personne'])
+            if nom['email'] == mail_input and nom['mdp'] == mdp_input:
+                print("connexion guest")#call la fonction de connexion
+
+        db_visiteur = self.visiteur_database.list_visiteurs()
+        for member in db_visiteur:
+            nom = self.visiteur_database.get_guests(member['id_personne'])
+            if nom['email'] == mail_input  and nom['mdp'] == mdp_input:
+                print("connexion visiteur")#call la fonction de connexion
+
+        db_seller = self.seller_database.list_sellers()
+        for member in db_seller:
+            nom = self.visiteur_database.get_guests(member['id_personne'])
+            if nom['email'] == mail_input  and nom['mdp'] == mdp_input:
+                print("connexion vendeur")#call la fonction de connexion

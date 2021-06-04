@@ -22,15 +22,23 @@ class Ui_MainWindow(object):
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
+
+
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(140, 90, 55, 16))
         self.label_2.setObjectName("label_2")
+
+
         self.inscription = QtWidgets.QPushButton(self.centralwidget)
         self.inscription.setGeometry(QtCore.QRect(150, 250, 93, 28))
         self.inscription.setObjectName("inscription")
+
+
         self.valider_connection = QtWidgets.QPushButton(self.centralwidget)
         self.valider_connection.setGeometry(QtCore.QRect(160, 200, 71, 28))
         self.valider_connection.setObjectName("valider_connection")
+
+
         self.mdp_input = QtWidgets.QLineEdit(self.centralwidget)
         self.mdp_input.setGeometry(QtCore.QRect(140, 160, 113, 22))
         self.mdp_input.setObjectName("mdp_input")

@@ -89,12 +89,12 @@ class VisiteurController(PersonneController):
         # Query database
         with self._database_engine.new_session() as session:
             article_dao = SellerDAO(session)
-            list_article = article_dao.get_by_seller(seller)
+            list_article = article_dao.get_seller_article(seller)
             return list_article.to_dict()
 
     def add_to_cart(self, nom, quantite):
         with self._database_engine.new_session() as session:
-            article = SellerDAO(session).get_article(nom)
+            article = SellerDAO(session).get_nom_article(nom)
             article_dict = article.to_dict()
             if(article_dict.get("qte") >= quantite):
                 tmp = []
@@ -103,6 +103,12 @@ class VisiteurController(PersonneController):
                 self.panier.append(tmp)
                 return 1
             return 0
+
+    def list_visiteurs(self):
+        with self._database_engine.new_session() as session:
+            visiteurs = VisiteurDAO(session).get_all()
+            visiteurs_data = [visiteur.to_dict() for visiteur in visiteurs]
+        return visiteurs_data
 
     def remove_from_cart(self, index, quantite): #index dans le panier de l'article
         if self.panier[index][1] <= quantite:

@@ -36,6 +36,12 @@ class SellerDAO(DAO):
         except NoResultFound:
             raise ResourceNotFound()
 
+    def get_nom_article(self, nom):
+        try:
+            return self._database_session.query(Article).filter_by(name=nom).order_by(Article.id).one()
+        except NoResultFound:
+            raise ResourceNotFound()
+
     def create_seller(self, data: dict):
         try:
             member = Seller(id=str(uuid.uuid4()), money=0, id_personne=data.get('id_personne'))
@@ -54,5 +60,11 @@ class SellerDAO(DAO):
     def get_id_seller(self, id):
         try:
             return self._database_session.query(Seller).filter_by(id=id).order_by(Seller.id).one()
+        except NoResultFound:
+            raise ResourceNotFound()
+
+    def get_seller_article(self, id):
+        try:
+            return self._database_session.query(Article).filter_by(id_seller=id).order_by(Article.id).all()
         except NoResultFound:
             raise ResourceNotFound()
