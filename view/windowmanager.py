@@ -2,6 +2,7 @@ import acceuil
 import guest_inscription
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
+import connection
 from view.Visiteur import interface_visiteur_connecte
 
 class WindowManager:
@@ -14,18 +15,30 @@ class WindowManager:
         self.data_visiteur = {}
         self.guest_inscription_window = None
         self.visiteur_inscription_window = None
-        self.confirm_data_window = None
+        self.main_widget = None
 
-        # inscription main page
-        self.main_widget = acceuil.QtWidgets.QWidget()
-        self.ui = acceuil.Ui_acceuil()
-        self.ui.setupUi(self.main_widget)
-        self.ui.submit.clicked.connect(self.Inscriptions_splitter)
-        self.main_widget.show()
+        # connection main page
+        self.connection_widget = connection.QtWidgets.QWidget()
+        self.ui_connection = connection.Ui_MainWindow()
+        self.ui_connection.setupUi(self.connection_widget)
+        #self.ui_connection.valider_connection.clicked.connect()
+        self.ui_connection.inscription.clicked.connect(self.Inscription_window)
+        self.connection_widget.show()
+
 
     # go back
     def previous_page_guest_inscription(self):
         self.guest_inscription_window.close()
+
+    #connection
+    def Inscription_window(self):
+
+        self.main_widget = acceuil.QtWidgets.QWidget()
+        self.ui = acceuil.Ui_Form()
+        self.ui.setupUi(self.main_widget)
+        self.ui.submit.clicked.connect(self.Inscriptions_splitter)
+        self.main_widget.show()
+
 
     def Inscriptions_splitter(self):
 
@@ -122,48 +135,3 @@ class WindowManager:
         self.visiteur_database.create_visiteur(self.data_visiteur, self.data_pers)
         print("tout roule")
 
-
-
-
-
-    def confirm_data_window_func (self):
-        print("submit_inscription")
-        # guest data
-        print(self.ui_guest.visite_choice.currentText())
-        print(self.data_guest)
-
-        self.data_guest["horaires"] = self.ui_guest.time_visite.time()
-        self.data_guest["lieu"] = self.ui_guest.visite_choice.currentText()
-        print("test")
-        print(self.data_guest)
-        # person data
-        self.data_pers["firstname"] = self.ui.prenom_input.text()
-        self.data_pers["lastname"] = self.ui.nom_input.text()
-        self.data_pers["age"] = self.ui.comboBox.currentText()
-        self.data_pers["email"] = self.ui.email_input.text()
-        self.data_pers["mdp"] = self.ui.mdp_input.text()
-        self.data_pers["statut"] = self.statut_personne
-
-        self.guest_database.create_guest(self.data_guest, self.data_pers)
-
-
-        self.close_inscription()
-        self.main_widget.close()
-
-
-
-        self.confirm_data_window = self.confirm_data.QtWidgets.QWidget()
-        self.ui_confirm_data = self.confirm_data.Ui_Form()
-        self.ui_confirm_data.setupUi(self.confirm_data_window)
-        self.confirm_data_window.show()
-        self.ui_confirm_data.cancel_data.clicked.connect(self.close_inscription)
-        self.ui_confirm_data.submit_data.clicked.connect(self.submit_inscription)
-        self.ui_confirm_data.textBrowser.setText(
-            "recap : \n\n" +
-            self.ui.prenom_input.text()
-            + " " + self.ui.nom_input.text() + "\n" +
-            self.ui.comboBox.currentText() + " ans \n" +
-            self.ui.email_input.text() + "\n" +
-            "statut : " + self.statut_personne + "\n" +
-            "-----------------------------------------\n"
-        )
