@@ -2,6 +2,7 @@ import acceuil
 import guest_inscription
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
+from view.Visiteur import interface_visiteur_connecte
 
 class WindowManager:
 
@@ -40,7 +41,14 @@ class WindowManager:
 
         # Vendeur
         if self.ui.vendeur_choice.isChecked() is True:
-            self.statut_personne = "vendeur"
+            print("vendeur check")
+           #self.statut_personne = "vendeur"
+            #self.test_w = QtWidgets.QWidget()
+            #self.ui_test = interface_visiteur_connecte.Ui_MainWindow()
+            #print("to setup")
+            #self.ui_test.setupUi(self.test_w, self.visiteur_database)
+            #print("after setup")
+            #self.test_w.show()
 
 
         # Visiteur

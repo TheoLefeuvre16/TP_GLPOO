@@ -21,11 +21,9 @@ class Ui_MainWindow(object):
         self.list_guest_widget.setGeometry(QtCore.QRect(80, 50, 201, 192))
         self.list_guest_widget.setObjectName("list_guest_widget")
         self.valid_guest_button = QtWidgets.QPushButton(self.centralwidget)
-        self.valid_guest_button.setGeometry(QtCore.QRect(130, 270, 91, 23))
-        self.valid_guest_button.setObjectName("valid_guest_button")
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
-        print("half setup")
+        print("guest - half setup")
         self.member_mapping = {}
         self.layout = QtWidgets.QHBoxLayout()
 
@@ -56,9 +54,6 @@ class Ui_MainWindow(object):
         self.layout.addLayout(self.listlayout)
         print("on en sort")
 
-    def clicked(self):
-        print(self.list_guest_widget.currentRow())
-        print(self.member_mapping[self.list_guest_widget.currentRow()]['id'])
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

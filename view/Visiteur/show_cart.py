@@ -9,10 +9,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from view.Visiteur import validation
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, visiteur_controller):
+        self.visiteur_controller = visiteur_controller
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(347, 390)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -24,17 +25,18 @@ class Ui_MainWindow(object):
         self.valid_article_button = QtWidgets.QPushButton(self.centralwidget)
         self.valid_article_button.setGeometry(QtCore.QRect(130, 270, 91, 23))
         self.valid_article_button.setObjectName("valid_article_button")
-        self.valid_article_button.clicked.connect(self.validate_cart(visiteur_controller))
+        self.valid_article_button.clicked.connect(self.validate_cart)
+        self.valid_article_button.move(100,300)
 
         self.remove_article_button = QtWidgets.QPushButton(self.centralwidget)
         self.remove_article_button.setGeometry(QtCore.QRect(130, 270, 91, 23))
         self.remove_article_button.setObjectName("remove_article_button")
         self.remove_article_button.move(0,300)
-        self.remove_article_button.clicked.connect(visiteur_controller.remove(visiteur_controller))
+        self.remove_article_button.clicked.connect(self.remove)
 
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
-        print("half setup")
+        print("cart - half setup")
         self.member_mapping = {}
         self.layout = QtWidgets.QHBoxLayout()
 
@@ -44,11 +46,11 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def list(self, visiteur_controller, seller_id):
+    def list(self, seller_id):
         print("call")
         index = 0
 
-        for article in visiteur_controller.show_cart():
+        for article in self.visiteur_controller.show_cart():
             print(article[0])
             print(article[1])
 
@@ -62,18 +64,23 @@ class Ui_MainWindow(object):
         self.listlayout.addWidget(self.listwidget)
         self.layout.addLayout(self.listlayout)
 
-    def remove(self, visiteur_controller):
-        visiteur_controller.remove_from_cart(self.member_mapping[self.list_article_widget.currentRow()]['name'], 1)
+    def remove(self):
+        self.visiteur_controller.remove_from_cart(self.member_mapping[self.list_article_widget.currentRow()]['name'], 1)
         #remove row
         self.list_article_widget.removeItemWidget(self.list_article_widget.currentItem())
 
-    def validate_cart(self, visiteur_controller):
-        visiteur_controller.validate_cart()
+    def validate_cart(self):
+        self.visiteur_controller.validate_cart()
         #clear le panier
         self.list_article_widget.clear()
         #show small window "your command is validated
+        self.test_w = QtWidgets.QWidget()
+        self.ui_test = validation.Ui_MainWindow()
+        self.ui_test.setupUi(self.test_w)
+        self.test_w.show()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.valid_article_button.setText(_translate("MainWindow", "Voir les articles"))
+        self.valid_article_button.setText(_translate("MainWindow", "Valider le panier"))
+        self.remove_article_button.setText(_translate("MainWindow", "Supprimer cet article"))

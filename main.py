@@ -29,10 +29,3 @@ exit(main_app.exec_())
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print('PyChakkjkjrm')
-
-
- #creation de la fenêtre listant les invités
-            #self.test_w = QtWidgets.QWidget()
-            #self.ui_test = list_guest.Ui_MainWindow()
-            #self.ui_test.setupUi(self.test_w, visiteur_database)
-            #self.test_w.show()
