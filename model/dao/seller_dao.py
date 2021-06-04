@@ -38,7 +38,7 @@ class SellerDAO(DAO):
 
     def create_seller(self, data: dict):
         try:
-            member = Seller(money=0, id_personne=data.get('id_personne'))
+            member = Seller(id=str(uuid.uuid4()), money=0, id_personne=data.get('id_personne'))
             self._database_session.add(member)
             self._database_session.flush()
         except IntegrityError:

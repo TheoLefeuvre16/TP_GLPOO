@@ -3,16 +3,19 @@ import guest_inscription
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
 import connection
+from view import seller_menu, add_article, seller_confirmation
 from view.Visiteur import interface_visiteur_connecte
 
 class WindowManager:
 
-    def __init__(self, guest_database, visiteur_database):
+    def __init__(self, guest_database, visiteur_database,seller_database):
         self.guest_database = guest_database
         self.visiteur_database = visiteur_database
+        self.seller_database = seller_database
         self.data_pers = {}
         self.data_guest = {}
         self.data_visiteur = {}
+        self.data_seller = {}
         self.guest_inscription_window = None
         self.visiteur_inscription_window = None
         self.main_widget = None
@@ -25,11 +28,22 @@ class WindowManager:
         self.ui_connection.inscription.clicked.connect(self.Inscription_window)
         self.connection_widget.show()
 
+        # seller
+        self.add_article_window = None
+        self.del_article_window = None
+        self.display_money = None
+        self.display_stands = None
 
     # go back
     def previous_page_guest_inscription(self):
         self.guest_inscription_window.close()
+        self.seller_inscription_window = None
 
+        self.confirm_data_window = None
+
+
+
+        # inscription main page
     #connection
     def Inscription_window(self):
 
@@ -54,15 +68,12 @@ class WindowManager:
 
         # Vendeur
         if self.ui.vendeur_choice.isChecked() is True:
-            print("vendeur check")
-           #self.statut_personne = "vendeur"
-            #self.test_w = QtWidgets.QWidget()
-            #self.ui_test = interface_visiteur_connecte.Ui_MainWindow()
-            #print("to setup")
-            #self.ui_test.setupUi(self.test_w, self.visiteur_database)
-            #print("after setup")
-            #self.test_w.show()
-
+            self.seller_inscription_window = seller_confirmation.QtWidgets.QWidget()
+            self.ui_seller = seller_confirmation.Ui_MainWindow()
+            self.ui_seller.setupUi(self.seller_inscription_window)
+            self.ui_seller.pushButton.clicked.connect(self.submit_seller_inscription)
+            self.seller_inscription_window.show()
+            self.statut_personne = "vendeur"
 
         # Visiteur
         if self.ui.visiteur_choice.isChecked() is True:
@@ -77,10 +88,44 @@ class WindowManager:
             print("setup ??")
             self.visiteur_inscription_window.show()
 
+    def article_window(self):
+        self.add_article_window = add_article.QtWidgets.QWidget()
+        self.ui_article = add_article.Ui_MainWindow()
+        self.ui_article.setupUi(self.add_article_window)
+        self.ui_article.pushButton.clicked.connect(self.add_article_function)
+        self.ui_article.pushButton_2.clicked.connect(self.close_add_window)
+        self.add_article_window.show()
+
+    def add_article_function(self):
+        data = {'name': self.ui_article.lineEdit.text(),
+                'price': int(self.ui_article.lineEdit_2.text()),
+                'stock': int(self.ui_article.lineEdit_3.text()),
+                'id_seller': int(self.ui_article.lineEdit_3.text())+1
+                }
+
+        self.seller_database.add_article(data)
+        self.add_article_window.close()
+
+    def close_add_window(self):
+        self.add_article_window.close()
 
     def close_inscription(self):
         #self.confirm_data_window.close()
         self.guest_inscription_window.close()
+
+    def submit_seller_inscription(self):
+        self.data_seller["money"] = 0
+        # person data
+        self.data_pers["firstname"] = self.ui.prenom_input.text()
+        self.data_pers["lastname"] = self.ui.nom_input.text()
+        self.data_pers["age"] = self.ui.comboBox.currentText()
+        self.data_pers["email"] = self.ui.email_input.text()
+        self.data_pers["mdp"] = self.ui.mdp_input.text()
+        self.data_pers["statut"] = self.statut_personne
+        self.seller_database.create_seller(self.data_seller, self.data_pers)
+
+        self.seller_inscription_window.close()
+        self.main_widget.close()
 
     def submit_inscription(self):
         # guest data

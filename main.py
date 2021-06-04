@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets
 import connection
 import sys
 from view.windowmanager import WindowManager
+from controller.seller_controller import SellerController
 
 '''
 from controller.member_controller import MemberController
@@ -18,10 +19,11 @@ database_engine = DatabaseEngine(url='sqlite:///inscription.db')
 database_engine.create_database()
 guest_database = guest_controller.GuestController(database_engine)
 visiteur_database = visiteur_controller.VisiteurController(database_engine)
+seller_database = SellerController(database_engine)
 
 main_app = connection.QtWidgets.QApplication(sys.argv)
 
-main_window = WindowManager(guest_database, visiteur_database)
+main_window = WindowManager(guest_database, visiteur_database,seller_database)
 
 exit(main_app.exec_())
 
