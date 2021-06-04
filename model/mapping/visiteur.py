@@ -10,10 +10,10 @@ class Visiteur(Base):
 
     id = Column(String(36), default=str(uuid.uuid4()), primary_key=True)
 
-    age = Column(Integer, nullable=False)
-    guest = Column(Integer, nullable=False)
-    stand = Column(Integer, nullable=False)
-    id_personne = Column(String(36), nullable=False)
+    age = Column(String(2), nullable=False)
+    guest = Column(String(2), nullable=False)
+    stand = Column(String(2), nullable=False)
+    id_personne = Column(Integer, nullable=False)
 
     def __repr__(self):
         return "<visiteur  n°%s (%d %d %d %s)>" % (self.id, self.age, self.guest, self.stand, self.id_personne)
