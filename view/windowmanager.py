@@ -197,6 +197,12 @@ class WindowManager:
             nom = self.visiteur_database.get_guests(member['id_personne'])
             if nom['email'] == mail_input  and nom['mdp'] == mdp_input:
                 print("connexion visiteur")#call la fonction de connexion
+                self.visiteur_connexion_window = QtWidgets.QWidget()
+                self.ui_visiteur_connexion = interface_visiteur_connecte.Ui_MainWindow()
+                print("print")
+                self.ui_visiteur_connexion.setupUi(self.visiteur_connexion_window, self.visiteur_database)
+                print("setup ??")
+                self.visiteur_connexion_window.show()
 
         db_seller = self.seller_database.list_sellers()
         for member in db_seller:

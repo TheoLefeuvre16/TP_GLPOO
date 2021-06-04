@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         print(self.database.list_seller())
         for member in self.database.list_seller():
             print(member['id_personne'])
-            nom = self.database.get_seller(member['id_personne'])
+            nom = self.database.get_guests(member['id_personne'])
             self.list_seller_widget.insertItem(index, "* %s" % (
                 nom['firstname']))
             print("ici")

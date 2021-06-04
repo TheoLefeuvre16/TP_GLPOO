@@ -67,8 +67,9 @@ class VisiteurController(PersonneController):
     def list_seller(self):
 
         with self._database_engine.new_session() as session:
-            seller_dao = SellerDAO(session).get_all()
-            return seller_dao.to_dict()
+            seller_dao = SellerDAO(session).get_all_sellers()
+            sellers_data = [seller.to_dict() for seller in seller_dao]
+            return sellers_data
 
     #lister les lieux -> skip
     #afficher l'emploi du temps = lister les guests
@@ -88,9 +89,9 @@ class VisiteurController(PersonneController):
     def list_article_from_seller(self, seller):
         # Query database
         with self._database_engine.new_session() as session:
-            article_dao = SellerDAO(session)
-            list_article = article_dao.get_seller_article(seller)
-            return list_article.to_dict()
+            article_dao = SellerDAO(session).get_seller_article(seller)
+            list_article = [article.to_dict() for article in article_dao]
+            return list_article
 
     def add_to_cart(self, nom, quantite):
         with self._database_engine.new_session() as session:

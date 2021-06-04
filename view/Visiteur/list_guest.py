@@ -20,7 +20,7 @@ class Ui_MainWindow(object):
         self.list_guest_widget = QtWidgets.QListWidget(self.centralwidget)
         self.list_guest_widget.setGeometry(QtCore.QRect(80, 50, 201, 192))
         self.list_guest_widget.setObjectName("list_guest_widget")
-        self.valid_guest_button = QtWidgets.QPushButton(self.centralwidget)
+
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
         print("guest - half setup")
@@ -47,7 +47,7 @@ class Ui_MainWindow(object):
             self.member_mapping[index] = member
             index += 1
 
-        self.list_guest_widget.clicked.connect(self.clicked)
+
         self.list_guest_widget.resize(self.list_guest_widget.sizeHint())
         self.list_guest_widget.move(0, 60)
         self.listlayout.addWidget(self.listwidget)
@@ -58,4 +58,4 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.valid_guest_button.setText(_translate("MainWindow", "Voir les articles"))
+

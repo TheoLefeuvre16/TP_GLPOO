@@ -42,6 +42,8 @@ class Ui_MainWindow(object):
         self.mdp_input = QtWidgets.QLineEdit(self.centralwidget)
         self.mdp_input.setGeometry(QtCore.QRect(140, 160, 113, 22))
         self.mdp_input.setObjectName("mdp_input")
+        self.mdp_input.setEchoMode(QtWidgets.QLineEdit.Password)
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(120, 30, 171, 41))
         font = QtGui.QFont()
@@ -52,11 +54,11 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.mail_input = QtWidgets.QLineEdit(self.centralwidget)
         self.mail_input.setGeometry(QtCore.QRect(140, 110, 113, 22))
-        self.mail_input.setEchoMode(QtWidgets.QLineEdit.Password)
         self.mail_input.setObjectName("mail_input")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(140, 140, 55, 16))
         self.label_3.setObjectName("label_3")
+
        # MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
