@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, UniqueConstraint, Integer
 
 class Guest(Base):
     __tablename__ = 'guest'
-    __table_args__ = (UniqueConstraint('horaires', 'lieu','id_personne'),)
+    __table_args__ = (UniqueConstraint('id_personne'),)
 
     id = Column(String(36), default=str(uuid.uuid4()), primary_key=True)
 

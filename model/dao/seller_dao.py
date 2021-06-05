@@ -16,9 +16,12 @@ class SellerDAO(DAO):
 
     def create_article(self, data: dict):
        try:
+           print("creation article")
+           print(data)
            article = Article(id=str(uuid.uuid4()), name=data.get('name'), price=data.get('price'),stock=data.get('stock'),id_seller=data.get('id_seller'))
            self._database_session.add(article)
            self._database_session.flush()
+           print(self._database_session.query(Article).order_by(Article.id).all())
 
        except IntegrityError:
            raise Error("Article already exists")

@@ -15,6 +15,7 @@ class SellerController:
     def add_article(self,data):
         try:
             with self._database_engine.new_session() as session:
+                print("ajout article controler")
                 article = SellerDAO(session).create_article(data)
                 article_data = article.to_dict()
 
@@ -27,6 +28,13 @@ class SellerController:
             articles = SellerDAO(session).get_all_articles()
             sellers_data = [article.to_dict() for article in articles]
         return sellers_data
+
+    def list_article_from_seller(self, seller):
+        # Query database
+        with self._database_engine.new_session() as session:
+            article_dao = SellerDAO(session).get_seller_article(seller)
+            list_article = [article.to_dict() for article in article_dao]
+            return list_article
 
     def get_article(self, guests_id):
         with self._database_engine.new_session() as session:
