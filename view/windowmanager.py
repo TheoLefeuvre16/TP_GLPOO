@@ -3,7 +3,7 @@ import guest_inscription
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
 import connection
-from view import seller_menu, add_article, seller_confirmation
+from view import add_article, seller_confirmation, interface_seller_connecte
 from view.Visiteur import interface_visiteur_connecte
 
 class WindowManager:
@@ -18,6 +18,7 @@ class WindowManager:
         self.data_seller = {}
         self.guest_inscription_window = None
         self.visiteur_inscription_window = None
+
         self.main_widget = None
 
         # connection main page
@@ -88,26 +89,7 @@ class WindowManager:
             print("setup ??")
             self.visiteur_inscription_window.show()
 
-    def article_window(self):
-        self.add_article_window = add_article.QtWidgets.QWidget()
-        self.ui_article = add_article.Ui_MainWindow()
-        self.ui_article.setupUi(self.add_article_window)
-        self.ui_article.pushButton.clicked.connect(self.add_article_function)
-        self.ui_article.pushButton_2.clicked.connect(self.close_add_window)
-        self.add_article_window.show()
 
-    def add_article_function(self):
-        data = {'name': self.ui_article.lineEdit.text(),
-                'price': int(self.ui_article.lineEdit_2.text()),
-                'stock': int(self.ui_article.lineEdit_3.text()),
-                'id_seller': int(self.ui_article.lineEdit_3.text())+1
-                }
-
-        self.seller_database.add_article(data)
-        self.add_article_window.close()
-
-    def close_add_window(self):
-        self.add_article_window.close()
 
     def close_inscription(self):
         #self.confirm_data_window.close()
@@ -208,4 +190,12 @@ class WindowManager:
         for member in db_seller:
             nom = self.visiteur_database.get_guests(member['id_personne'])
             if nom['email'] == mail_input  and nom['mdp'] == mdp_input:
-                print("connexion vendeur")#call la fonction de connexion
+                id_personne = nom['id']
+                print(nom['email'])
+                print(id_personne)
+                self.seller_connexion_window = QtWidgets.QWidget()
+                self.ui_seller_connexion = interface_seller_connecte.Ui_MainWindow()
+                print("print")
+                self.ui_seller_connexion.setupUi(self.seller_connexion_window,self.seller_database,id_personne)
+                print("setup ??")
+                self.seller_connexion_window.show()

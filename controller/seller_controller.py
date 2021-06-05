@@ -15,6 +15,7 @@ class SellerController:
     def add_article(self,data):
         try:
             with self._database_engine.new_session() as session:
+                print("ajout article controler")
                 article = SellerDAO(session).create_article(data)
                 article_data = article.to_dict()
 

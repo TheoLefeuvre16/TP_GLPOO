@@ -14,10 +14,10 @@ class Article(Base):
     name = Column(String(50), nullable=False)
     price = Column(Integer, nullable=False)
     stock = Column(Integer, nullable=False)
-    id_seller = Column(Integer, nullable=False)
+    id_seller = Column(String(50), nullable=False)
 
     def __repr__(self):
-        return "<Article N° %s(%s %d€ - %d restant - vendeur : %d)>" % (self.id, self.name, self.price, self.stock, self.id_seller)
+        return "<Article N° %s(%s %d€ - %d restant - vendeur : %s)>" % (self.id, self.name, self.price, self.stock, self.id_seller)
 
     def to_dict(self):
         return {

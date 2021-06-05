@@ -9,10 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from view import add_article
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, visiteur_database,id_personne):
+        self.seller_database = visiteur_database
+        self._id_personne = id_personne
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(433, 312)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -20,28 +22,53 @@ class Ui_MainWindow(object):
         self.listView = QtWidgets.QListView(self.centralwidget)
         self.listView.setGeometry(QtCore.QRect(20, 60, 231, 141))
         self.listView.setObjectName("listView")
+
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(290, 40, 121, 31))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.clicked.connect(self.article_window)
+
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setGeometry(QtCore.QRect(290, 90, 121, 31))
         self.pushButton_3.setObjectName("pushButton_3")
+
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_4.setGeometry(QtCore.QRect(290, 140, 121, 31))
         self.pushButton_4.setObjectName("pushButton_4")
+
         self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_5.setGeometry(QtCore.QRect(290, 190, 121, 31))
         self.pushButton_5.setObjectName("pushButton_5")
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 30, 151, 16))
         self.label.setObjectName("label")
-        #MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
-        #MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def article_window(self):
+        self.add_article_window = add_article.QtWidgets.QWidget()
+        self.ui_article = add_article.Ui_MainWindow()
+        self.ui_article.setupUi(self.add_article_window)
+        self.ui_article.pushButton.clicked.connect(self.add_article_function)
+        self.ui_article.pushButton_2.clicked.connect(self.close_add_window)
+        self.add_article_window.show()
+
+    def add_article_function(self):
+        data = {'name': self.ui_article.lineEdit.text(),
+                'price': int(self.ui_article.lineEdit_2.text()),
+                'stock': int(self.ui_article.lineEdit_3.text()),
+                'id_seller': self._id_personne,
+                }
+
+        self.seller_database.add_article(data)
+        self.add_article_window.close()
+
+    def close_add_window(self):
+        self.add_article_window.close()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
