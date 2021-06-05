@@ -1,5 +1,13 @@
 import acceuil
+import json
 import guest_inscription
+import accueil_admin
+import list_visiteur
+import list_vendeur
+import list_invite
+import list_stand
+import list_recette
+import schedule
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
 import connection
@@ -7,18 +15,28 @@ from view import seller_confirmation, interface_seller_connecte
 from view.Visiteur import interface_visiteur_connecte
 import guest_window
 
+
 class WindowManager:
 
-    def __init__(self, guest_database, visiteur_database,seller_database):
+    def __init__(self, guest_database, visiteur_database,seller_database, admin_database):
         self.guest_database = guest_database
         self.visiteur_database = visiteur_database
         self.seller_database = seller_database
+        self.admin_database = admin_database
         self.data_pers = {}
         self.data_guest = {}
         self.data_visiteur = {}
         self.data_seller = {}
         self.guest_inscription_window = None
         self.visiteur_inscription_window = None
+
+        self.list_visiteur_window = None
+        self.list_seller_window = None
+        self.list_guest_window = None
+        self.list_stand_window = None
+        self.list_recette_window = None
+        self.list_schedule_window = None
+
         self.main_widget = None
         self.guest_page_window = None
 
@@ -28,6 +46,7 @@ class WindowManager:
         self.ui_connection.setupUi(self.connection_widget)
         self.ui_connection.valider_connection.clicked.connect(self.valider_connexion)
         self.ui_connection.inscription.clicked.connect(self.Inscription_window)
+        self.ui_connection.pushButton.clicked.connect(self.Mode_admin)
         self.connection_widget.show()
 
         # seller
@@ -45,9 +64,115 @@ class WindowManager:
 
         self.confirm_data_window = None
 
+    def previous_page_list_visiteur(self):
+        self.list_visiteur_window.close()
+
+    def previous_page_list_seller(self):
+        self.list_seller_window.close()
+
+    def previous_page_list_guest(self):
+        self.list_guest_window.close()
+
+    def previous_page_list_stand(self):
+        self.list_stand_window.close()
+
+    def previous_page_list_recette(self):
+        self.list_recette_window.close()
+
+    def previous_page_list_schedule(self):
+        self.list_schedule_window.close()
+
+    def Mode_admin(self):
+        self.main_widget = accueil_admin.QtWidgets.QWidget()
+        self.ui = accueil_admin.Ui_Form()
+        self.ui.setupUi(self.main_widget)
+        self.ui.list_visiteur.clicked.connect(self.Print_visiteur_window)
+        self.ui.list_seller.clicked.connect(self.Print_seller_window)
+        self.ui.list_guest.clicked.connect(self.Print_guest_window)
+        self.ui.list_stand.clicked.connect(self.Print_stand_window)
+        self.ui.list_recette.clicked.connect(self.Print_recette_window)
+        self.ui.list_schedule.clicked.connect(self.Print_schedule_window)
+        self.ui.modify_schedule.clicked.connect(self.Print_schedule_window)
+        self.main_widget.show()
+
+    def Print_schedule_window(self):
+        self.list_schedule_window = schedule.QtWidgets.QWidget()
+        self.ui_schedule = schedule.Ui_Form()
+        self.ui_schedule.setupUi(self.list_schedule_window)
+        self.ui_schedule.pushButton.clicked.connect(self.previous_page_list_schedule)
+
+        self.list_schedule_window.show()
+
+    def Print_recette_window(self):
+        self.list_recette_window = list_recette.QtWidgets.QWidget()
+        self.ui_recette = list_recette.Ui_Form()
+        self.ui_recette.setupUi(self.list_recette_window)
+        self.ui_recette.pushButton.clicked.connect(self.previous_page_list_recette)
+
+        self.ui_recette.lcdNumber.display(157)
 
 
-        # inscription main page
+        self.list_recette_window.show()
+
+    def Print_stand_window(self):
+        self.list_stand_window = list_stand.QtWidgets.QWidget()
+        self.ui_stand = list_stand.Ui_Form()
+        self.ui_stand.setupUi(self.list_stand_window)
+        self.ui_stand.pushButton.clicked.connect(self.previous_page_list_stand)
+
+        db = self.admin_database.list_guest()
+        for i in range(len(db)):
+            list_text = json.dumps(db[i])
+            self.ui_stand.plainTextEdit.insertPlainText("Stand n°" + str(i) + ":\n")
+            self.ui_stand.plainTextEdit.insertPlainText(list_text + "\n\n")
+
+        self.list_stand_window.show()
+
+    def Print_guest_window(self):
+        self.list_guest_window = list_invite.QtWidgets.QWidget()
+        self.ui_guest = list_invite.Ui_Form()
+        self.ui_guest.setupUi(self.list_guest_window)
+        self.ui_guest.pushButton.clicked.connect(self.previous_page_list_guest)
+
+        db = self.admin_database.list_guest()
+        for i in range(len(db)):
+            list_text = json.dumps(db[i])
+            self.ui_guest.plainTextEdit.insertPlainText("Invite n°" + str(i) + ":\n")
+            self.ui_guest.plainTextEdit.insertPlainText(list_text + "\n\n")
+
+        self.list_guest_window.show()
+
+    def Print_seller_window(self):
+        self.list_seller_window = list_vendeur.QtWidgets.QWidget()
+        self.ui_seller = list_vendeur.Ui_Form()
+        self.ui_seller.setupUi(self.list_seller_window)
+        self.ui_seller.pushButton.clicked.connect(self.previous_page_list_seller)
+
+        db = self.admin_database.list_seller()
+        for i in range(len(db)):
+            list_text = json.dumps(db[i])
+            self.ui_seller.plainTextEdit.insertPlainText("Vendeur n°" + str(i) + ":\n")
+            self.ui_seller.plainTextEdit.insertPlainText(list_text + "\n\n")
+
+        self.list_seller_window.show()
+
+    def Print_visiteur_window(self):
+        self.list_visiteur_window = list_visiteur.QtWidgets.QWidget()
+        self.ui_visiteur = list_visiteur.Ui_Form()
+        self.ui_visiteur.setupUi(self.list_visiteur_window)
+        self.ui_visiteur.pushButton.clicked.connect(self.previous_page_list_visiteur)
+
+        db = self.admin_database.list_visiteur()
+
+        for i in range(len(db)):
+            list_text = json.dumps(db[i])
+            self.ui_visiteur.plainTextEdit.insertPlainText("Visiteur n°" + str(i) + ":\n")
+            self.ui_visiteur.plainTextEdit.insertPlainText(list_text + "\n\n")
+
+        self.list_visiteur_window.show()
+
+
+    # inscription main page
     #connection
     def Inscription_window(self):
 
