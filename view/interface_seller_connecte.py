@@ -12,16 +12,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from view import add_article
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow, visiteur_database,id_personne):
-        self.seller_database = visiteur_database
+    def setupUi(self, MainWindow, seller_database, id_personne):
+        self.seller_database = seller_database
         self._id_personne = id_personne
+        self.index = 0
+
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(433, 312)
+        MainWindow.resize(431, 253)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.listView = QtWidgets.QListView(self.centralwidget)
-        self.listView.setGeometry(QtCore.QRect(20, 60, 231, 141))
-        self.listView.setObjectName("listView")
 
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(290, 40, 121, 31))
@@ -32,22 +31,46 @@ class Ui_MainWindow(object):
         self.pushButton_3.setGeometry(QtCore.QRect(290, 90, 121, 31))
         self.pushButton_3.setObjectName("pushButton_3")
 
-        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(290, 140, 121, 31))
-        self.pushButton_4.setObjectName("pushButton_4")
-
-        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(290, 190, 121, 31))
-        self.pushButton_5.setObjectName("pushButton_5")
+        #self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
+        #self.pushButton_4.setGeometry(QtCore.QRect(290, 140, 121, 31))
+        #self.pushButton_4.setObjectName("pushButton_4")
 
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(20, 30, 151, 16))
+        self.label.setGeometry(QtCore.QRect(20, 20, 151, 16))
         self.label.setObjectName("label")
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
+
+        self.list_article_widget = QtWidgets.QListWidget(self.centralwidget)
+        self.list_article_widget.setGeometry(QtCore.QRect(20, 40, 256, 151))
+        self.list_article_widget.setObjectName("textBrowser")
+
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(20, 210, 151, 16))
+        self.label_2.setObjectName("label_2")
+        #MainWindow.setCentralWidget(self.centralwidget)
+
+        self.listlayout = QtWidgets.QGridLayout()
+        self.listwidget = QtWidgets.QListWidget()
+        self.member_mapping = []
+        self.layout = QtWidgets.QHBoxLayout()
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        self.list_articles(self._id_personne)
+
+    def list_articles(self, seller_id):
+        self.index = 0
+        for article in self.seller_database.list_article_from_seller(seller_id):
+            if seller_id == article['id_seller']:
+                self.list_article_widget.insertItem( self.index, "* %s" % (
+                    article['name']))
+                self.member_mapping.append(article)
+                self.index += 1
+
+        #self.list_article_widget.resize(self.list_article_widget.sizeHint())
+        #self.list_article_widget.move(0, 60)
+        self.listlayout.addWidget(self.listwidget)
+        self.layout.addLayout(self.listlayout)
 
     def article_window(self):
         self.add_article_window = add_article.QtWidgets.QWidget()
@@ -63,9 +86,13 @@ class Ui_MainWindow(object):
                 'stock': int(self.ui_article.lineEdit_3.text()),
                 'id_seller': self._id_personne,
                 }
-
         self.seller_database.add_article(data)
         self.add_article_window.close()
+
+        self.list_article_widget.insertItem(self.index, "* %s" % (data['name']))
+        self.index += 1
+
+
 
     def close_add_window(self):
         self.add_article_window.close()
@@ -75,6 +102,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_2.setText(_translate("MainWindow", "Ajouter un article"))
         self.pushButton_3.setText(_translate("MainWindow", "Supprimer un article"))
-        self.pushButton_4.setText(_translate("MainWindow", "Afficher les recettes"))
-        self.pushButton_5.setText(_translate("MainWindow", "Afficher les stands"))
+        #self.pushButton_4.setText(_translate("MainWindow", "Afficher les recettes"))
         self.label.setText(_translate("MainWindow", "Mes articles"))
+        self.label_2.setText(_translate("MainWindow", "Recettes : 0 €"))
