@@ -1,5 +1,5 @@
 import confirm_data
-from controller import guest_controller, visiteur_controller
+from controller import guest_controller, visiteur_controller, admin_controller
 from model.database import DatabaseEngine
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
@@ -20,10 +20,10 @@ database_engine.create_database()
 guest_database = guest_controller.GuestController(database_engine)
 visiteur_database = visiteur_controller.VisiteurController(database_engine)
 seller_database = SellerController(database_engine)
-
+admin_database = admin_controller.AdminController(database_engine)
 main_app = connection.QtWidgets.QApplication(sys.argv)
 
-main_window = WindowManager(guest_database, visiteur_database,seller_database)
+main_window = WindowManager(guest_database, visiteur_database,seller_database, admin_database)
 
 exit(main_app.exec_())
 

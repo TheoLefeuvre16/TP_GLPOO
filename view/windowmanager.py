@@ -1,5 +1,8 @@
 import acceuil
+import json
 import guest_inscription
+import accueil_admin
+import list_visiteur
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
 import connection
@@ -8,16 +11,20 @@ from view.Visiteur import interface_visiteur_connecte
 
 class WindowManager:
 
-    def __init__(self, guest_database, visiteur_database,seller_database):
+    def __init__(self, guest_database, visiteur_database,seller_database, admin_database):
         self.guest_database = guest_database
         self.visiteur_database = visiteur_database
         self.seller_database = seller_database
+        self.admin_database = admin_database
         self.data_pers = {}
         self.data_guest = {}
         self.data_visiteur = {}
         self.data_seller = {}
         self.guest_inscription_window = None
         self.visiteur_inscription_window = None
+
+        self.list_visiteur_window = None
+
         self.main_widget = None
 
         # connection main page
@@ -26,6 +33,7 @@ class WindowManager:
         self.ui_connection.setupUi(self.connection_widget)
         self.ui_connection.valider_connection.clicked.connect(self.valider_connexion)
         self.ui_connection.inscription.clicked.connect(self.Inscription_window)
+        self.ui_connection.pushButton.clicked.connect(self.Mode_admin)
         self.connection_widget.show()
 
         # seller
@@ -41,9 +49,32 @@ class WindowManager:
 
         self.confirm_data_window = None
 
+    def previous_page_list_visiteur(self):
+        self.list_visiteur_window.close()
+
+    def Mode_admin(self):
+        self.main_widget = accueil_admin.QtWidgets.QWidget()
+        self.ui = accueil_admin.Ui_Form()
+        self.ui.setupUi(self.main_widget)
+        self.ui.list_visiteur.clicked.connect(self.Print_visiteur_window)
+        self.main_widget.show()
+
+    def Print_visiteur_window(self):
+        self.list_visiteur_window = list_visiteur.QtWidgets.QWidget()
+        self.ui_visiteur = list_visiteur.Ui_Form()
+        self.ui_visiteur.setupUi(self.list_visiteur_window)
+        self.ui_visiteur.pushButton.clicked.connect(self.previous_page_list_visiteur)
+
+        db = self.admin_database.list_visiteur()
+        list_text = json.dumps(db)
+        for i in range(len(db)):
+            self.ui_visiteur.plainTextEdit.insertPlainText("Visiteur n°" + str(i) + ":\n")
+            self.ui_visiteur.plainTextEdit.insertPlainText(list_text + "\n\n")
+
+        self.list_visiteur_window.show()
 
 
-        # inscription main page
+    # inscription main page
     #connection
     def Inscription_window(self):
 
