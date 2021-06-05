@@ -289,6 +289,10 @@ class WindowManager:
         self.data_pers["mdp"] = self.ui.mdp_input.text()
         self.data_pers["statut"] = self.statut_personne
         self.visiteur_database.create_visiteur(self.data_visiteur, self.data_pers)
+
+        self.visiteur_inscription_window.close()
+        self.main_widget.close()
+
         print("tout roule")
 
     # PAGE GUEST
