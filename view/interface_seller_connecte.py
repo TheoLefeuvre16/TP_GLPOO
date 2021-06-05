@@ -60,9 +60,9 @@ class Ui_MainWindow(object):
         self.index = 0
         for article in self.seller_database.list_article_from_seller(seller_id):
             if seller_id == article['id_seller']:
-                if(article not in self.member_mapping):
-                    self.list_article_widget.insertItem( self.index, "* %s" % (
-                        article['name']))
+                if(article not in self.member_mapping and article['stock']>0):
+                    self.list_article_widget.insertItem( self.index, "* %s : %s" % (
+                        article['name'], article['stock']))
                     self.member_mapping.append(article)
                     self.index += 1
         print("MAPPIIIING")

@@ -97,13 +97,23 @@ class VisiteurController(PersonneController):
         with self._database_engine.new_session() as session:
             article = SellerDAO(session).get_nom_article(nom)
             article_dict = article.to_dict()
-            if(article_dict.get("qte") >= quantite):
-                tmp = []
-                tmp.append(article_dict.get("nom"))
-                tmp.append(quantite)
-                self.panier.append(tmp)
+            article.stock -=1
+            print(article_dict)
+            index = -1
+            for i in range(0,len(self.panier)):
+                if(article_dict.get("name") == self.panier[i][0]):
+                    index = i
+            if index != -1:
+                self.panier[index][1] += 1
                 return 1
-            return 0
+            else:
+                if(article_dict.get("stock") >= quantite):
+                    tmp = []
+                    tmp.append(article_dict.get("name"))
+                    tmp.append(quantite)
+                    self.panier.append(tmp)
+                    return 1
+                return 0
 
     def list_visiteurs(self):
         with self._database_engine.new_session() as session:

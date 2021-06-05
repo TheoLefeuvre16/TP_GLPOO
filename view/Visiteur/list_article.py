@@ -43,23 +43,54 @@ class Ui_MainWindow(object):
         for article in self.visiteur_controller.list_article_from_seller(seller_id):
             print(article['id_seller'])
             if seller_id == article['id_seller']:
-                self.list_article_widget.insertItem(index, "* %s" % (
-                    article['name']))
-                self.member_mapping.append(article)
-                index += 1
+                if (article not in self.member_mapping and article['stock']>0):
+                    self.list_article_widget.insertItem(index, "* %s - %s" % (
+                        article['name'], article['stock']))
+                    self.member_mapping.append(article)
+                    index += 1
 
         self.list_article_widget.resize(self.list_article_widget.sizeHint())
         self.list_article_widget.move(0, 60)
         self.listlayout.addWidget(self.listwidget)
         self.layout.addLayout(self.listlayout)
 
+    def update_list(self, id_article):
+        print("update:")
+        print(self.member_mapping)
+        index = -1
+        for i in range(0, len(self.member_mapping)):
+            if(self.member_mapping[i]['id'] == id_article):
+                index = i
+
+        print(index)
+        qitem = self.list_article_widget.item(index)
+        item = qitem.text()
+        tab = item.split("-")
+        intv = int(tab[-1])-1
+        if(intv > 0):
+            string = tab[0]+ "- " + str(intv)
+            print(string)
+            qitem.setText(string)
+        else:
+            self.del_article()
+
     def add(self):
         try:
-            print(self.list_article_widget.currentRow())
-            print(self.member_mapping[self.list_article_widget.currentRow()]['id'])
+            #print(self.list_article_widget.currentRow())
+            #print(self.member_mapping[self.list_article_widget.currentRow()]['id'])
             self.visiteur_controller.add_to_cart(self.member_mapping[self.list_article_widget.currentRow()]['name'], 1)
+            self.update_list(self.member_mapping[self.list_article_widget.currentRow()]['id'])
         except:
             print("pas d'article sélectionné")
+
+    def del_article(self):
+        try:
+            id_article = self.member_mapping[self.list_article_widget.currentRow()]['id']
+            item = self.list_article_widget.takeItem(self.list_article_widget.currentRow())
+            self.list_article_widget.removeItemWidget(item)
+            self.seller_database.delete_article(id_article)
+        except:
+            print("")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
