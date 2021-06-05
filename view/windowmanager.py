@@ -1,23 +1,16 @@
-import acceuil
 import json
-import guest_inscription
-import accueil_admin
-import list_visiteur
-import list_vendeur
-import list_invite
-import list_stand
-import list_recette
 import schedule
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
-import connection
-from view import seller_confirmation, interface_seller_connecte
+from view import interface_seller_connecte
+from view.assets import list_vendeur, guest_inscription, list_recette, list_stand, accueil_admin, list_invite, \
+    connection, acceuil, seller_confirmation, list_visiteur, guest_window
 from view.Visiteur import interface_visiteur_connecte
-import guest_window
 
 
 class WindowManager:
 
+    # VARIABLES
     def __init__(self, guest_database, visiteur_database,seller_database, admin_database):
         self.guest_database = guest_database
         self.visiteur_database = visiteur_database
@@ -46,7 +39,6 @@ class WindowManager:
         self.ui_connection.setupUi(self.connection_widget)
         self.ui_connection.valider_connection.clicked.connect(self.valider_connexion)
         self.ui_connection.inscription.clicked.connect(self.Inscription_window)
-        self.ui_connection.pushButton.clicked.connect(self.Mode_admin)
         self.connection_widget.show()
 
         # seller
@@ -57,7 +49,7 @@ class WindowManager:
 
 
 
-    # go back
+    # GO BACK
     def previous_page_guest_inscription(self):
         self.guest_inscription_window.close()
         self.seller_inscription_window = None
@@ -82,19 +74,23 @@ class WindowManager:
     def previous_page_list_schedule(self):
         self.list_schedule_window.close()
 
+    # MODE ADMIN
     def Mode_admin(self):
         self.main_widget = accueil_admin.QtWidgets.QWidget()
-        self.ui = accueil_admin.Ui_Form()
-        self.ui.setupUi(self.main_widget)
-        self.ui.list_visiteur.clicked.connect(self.Print_visiteur_window)
-        self.ui.list_seller.clicked.connect(self.Print_seller_window)
-        self.ui.list_guest.clicked.connect(self.Print_guest_window)
-        self.ui.list_stand.clicked.connect(self.Print_stand_window)
-        self.ui.list_recette.clicked.connect(self.Print_recette_window)
-        self.ui.list_schedule.clicked.connect(self.Print_schedule_window)
-        self.ui.modify_schedule.clicked.connect(self.Print_schedule_window)
+        self.ui_admin = accueil_admin.Ui_Form()
+        self.ui_admin.setupUi(self.main_widget)
+        print("issou2)")
+        self.ui_admin.list_visiteur.clicked.connect(self.Print_visiteur_window)
+        self.ui_admin.list_seller.clicked.connect(self.Print_seller_window)
+        self.ui_admin.list_guest.clicked.connect(self.Print_guest_window)
+        self.ui_admin.list_stand.clicked.connect(self.Print_stand_window)
+        self.ui_admin.list_recette.clicked.connect(self.Print_recette_window)
+        self.ui_admin.list_schedule.clicked.connect(self.Print_schedule_window)
+        self.ui_admin.modify_schedule.clicked.connect(self.Print_schedule_window)
         self.main_widget.show()
 
+
+    # AFFICHAGE DES LISTES
     def Print_schedule_window(self):
         self.list_schedule_window = schedule.QtWidgets.QWidget()
         self.ui_schedule = schedule.Ui_Form()
@@ -172,8 +168,9 @@ class WindowManager:
         self.list_visiteur_window.show()
 
 
-    # inscription main page
-    #connection
+    # INSCRIPTION
+
+    # page principale
     def Inscription_window(self):
 
         self.main_widget = acceuil.QtWidgets.QWidget()
@@ -182,7 +179,7 @@ class WindowManager:
         self.ui.submit.clicked.connect(self.Inscriptions_splitter)
         self.main_widget.show()
 
-
+    # redirection en fonction des  statuts
     def Inscriptions_splitter(self):
 
         # Guest
@@ -218,11 +215,12 @@ class WindowManager:
             self.visiteur_inscription_window.show()
 
 
-
+    # fermeture fenetre inscription
     def close_inscription(self):
         #self.confirm_data_window.close()
         self.guest_inscription_window.close()
 
+    # vendeur
     def submit_seller_inscription(self):
         self.data_seller["money"] = 0
         # person data
@@ -237,6 +235,7 @@ class WindowManager:
         self.seller_inscription_window.close()
         self.main_widget.close()
 
+    #guest
     def submit_inscription(self):
         # guest data
         self.data_guest["horaires"] = str(self.ui_guest.time_visite.time().toPyTime())
@@ -257,7 +256,7 @@ class WindowManager:
         self.guest_inscription_window.close()
         self.main_widget.close()
 
-
+    #visiteur
     def submit_visiteur(self):
         print("submit visiteur")
         print("index : ", self.ui_visiteur.comboBox_billets.currentIndex())
@@ -292,6 +291,7 @@ class WindowManager:
         self.visiteur_database.create_visiteur(self.data_visiteur, self.data_pers)
         print("tout roule")
 
+    # PAGE GUEST
     def guest_window(self , horaire, lieu):
         self.guest_page_window = guest_window.QtWidgets.QWidget()
         self.ui_guest_page = guest_window.Ui_Form()
@@ -304,6 +304,7 @@ class WindowManager:
     def close_window_page(self):
         self.guest_page_window.close()
 
+    # PAGE CONNECTION
     def valider_connexion(self):
 
         print(self.ui_connection.mail_input.text())
@@ -312,15 +313,18 @@ class WindowManager:
 
         db_guest = self.guest_database.list_guest()
 
+        #admin mode
+        if "admin" == mail_input and "admin" == mdp_input:
+            self.Mode_admin()
+
+        # guest
         for member in db_guest:
             nom = self.guest_database.get_person(member['id_personne'])
             if nom['email'] == mail_input and nom['mdp'] == mdp_input:
                 print("connexion guest")
                 self.guest_window(horaire=member['horaires'], lieu=member['lieu'])
 
-
-
-
+        #visiteur
         db_visiteur = self.visiteur_database.list_visiteurs()
         for member in db_visiteur:
             nom = self.visiteur_database.get_guests(member['id_personne'])
@@ -333,6 +337,7 @@ class WindowManager:
                 print("setup ??")
                 self.visiteur_connexion_window.show()
 
+        # vendeur
         db_seller = self.seller_database.list_sellers()
         for member in db_seller:
             nom = self.visiteur_database.get_guests(member['id_personne'])

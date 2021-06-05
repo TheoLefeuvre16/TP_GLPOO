@@ -1,9 +1,7 @@
-import confirm_data
+
 from controller import guest_controller, visiteur_controller, admin_controller
 from model.database import DatabaseEngine
-from view.Visiteur import billetterie
-from PyQt5 import QtWidgets
-import connection
+from view.assets import connection
 import sys
 from view.windowmanager import WindowManager
 from controller.seller_controller import SellerController

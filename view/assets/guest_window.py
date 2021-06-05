@@ -35,6 +35,6 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Guest"))
         self.deco_button.setText(_translate("Form", "Déconnection"))
         self.label.setText(_translate("Form", "Rappel "))

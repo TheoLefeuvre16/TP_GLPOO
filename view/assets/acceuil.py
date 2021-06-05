@@ -211,7 +211,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Inscription"))
         self.email_input.setText(_translate("Form", "ex : xyz@gmail.com"))
         self.guest_choice.setText(_translate("Form", "Guest"))
         self.vendeur_choice.setText(_translate("Form", "Vendeur"))

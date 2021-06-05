@@ -59,7 +59,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Guest"))
         self.label.setText(_translate("Form", "Guest"))
         self.precedent_button.setText(_translate("Form", "Précédent"))
         self.visite_choice.setCurrentText(_translate("Form", "default"))
