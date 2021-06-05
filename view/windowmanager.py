@@ -3,7 +3,7 @@ import guest_inscription
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
 import connection
-from view import add_article, seller_confirmation, interface_seller_connecte
+from view import seller_confirmation, interface_seller_connecte
 from view.Visiteur import interface_visiteur_connecte
 
 class WindowManager:
@@ -190,8 +190,7 @@ class WindowManager:
         for member in db_seller:
             nom = self.visiteur_database.get_guests(member['id_personne'])
             if nom['email'] == mail_input  and nom['mdp'] == mdp_input:
-                id_personne = nom['id']
-                print(nom['email'])
+                id_personne = member['id']
                 print(id_personne)
                 self.seller_connexion_window = QtWidgets.QWidget()
                 self.ui_seller_connexion = interface_seller_connecte.Ui_MainWindow()
