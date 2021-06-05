@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets
 import connection
 from view import seller_confirmation, interface_seller_connecte
 from view.Visiteur import interface_visiteur_connecte
+import guest_window
 
 class WindowManager:
 
@@ -18,8 +19,8 @@ class WindowManager:
         self.data_seller = {}
         self.guest_inscription_window = None
         self.visiteur_inscription_window = None
-
         self.main_widget = None
+        self.guest_page_window = None
 
         # connection main page
         self.connection_widget = connection.QtWidgets.QWidget()
@@ -34,6 +35,8 @@ class WindowManager:
         self.del_article_window = None
         self.display_money = None
         self.display_stands = None
+
+
 
     # go back
     def previous_page_guest_inscription(self):
@@ -111,7 +114,7 @@ class WindowManager:
 
     def submit_inscription(self):
         # guest data
-        self.data_guest["horaires"] = self.ui_guest.time_visite.time()
+        self.data_guest["horaires"] = str(self.ui_guest.time_visite.time().toPyTime())
         self.data_guest["lieu"] = self.ui_guest.visite_choice.currentText()
 
         # person data
@@ -126,7 +129,9 @@ class WindowManager:
 
         print(db)
         self.close_inscription()
+        self.guest_inscription_window.close()
         self.main_widget.close()
+
 
     def submit_visiteur(self):
         print("submit visiteur")
@@ -162,6 +167,18 @@ class WindowManager:
         self.visiteur_database.create_visiteur(self.data_visiteur, self.data_pers)
         print("tout roule")
 
+    def guest_window(self , horaire, lieu):
+        self.guest_page_window = guest_window.QtWidgets.QWidget()
+        self.ui_guest_page = guest_window.Ui_Form()
+        self.ui_guest_page.setupUi(self.guest_page_window)
+        self.ui_guest_page.input_text.setText("Votre intervention est a " + horaire + " dans " + lieu)
+        self.ui_guest_page.deco_button.clicked.connect(self.close_window_page)
+        self.guest_page_window.show()
+
+
+    def close_window_page(self):
+        self.guest_page_window.close()
+
     def valider_connexion(self):
 
         print(self.ui_connection.mail_input.text())
@@ -169,10 +186,15 @@ class WindowManager:
         mdp_input = self.ui_connection.mdp_input.text()
 
         db_guest = self.guest_database.list_guest()
+
         for member in db_guest:
-            nom = self.visiteur_database.get_guests(member['id_personne'])
+            nom = self.guest_database.get_person(member['id_personne'])
             if nom['email'] == mail_input and nom['mdp'] == mdp_input:
-                print("connexion guest")#call la fonction de connexion
+                print("connexion guest")
+                self.guest_window(horaire=member['horaires'], lieu=member['lieu'])
+
+
+
 
         db_visiteur = self.visiteur_database.list_visiteurs()
         for member in db_visiteur:

@@ -72,3 +72,9 @@ class GuestController(PersonneController):
             guest = guest_dao.get_by_time(horaire)
             return guest.to_dict()
 
+    def get_person(self, id):
+        with self._database_engine.new_session() as session:
+            guest = PersonneDAO(session).get(id)
+            guest_data = guest.to_dict()
+        return guest_data
+

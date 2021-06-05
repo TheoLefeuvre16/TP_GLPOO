@@ -3,7 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from model.mapping.guest import Guest
 from model.dao.dao import DAO
-
+import uuid
 from exceptions import Error, ResourceNotFound
 
 
@@ -44,10 +44,11 @@ class GuestDAO(DAO):
     def create(self, data: dict):
         print("call create")
         try:
-            tmp = "oui"
+
             #member = Guest(horaires=data.get('horaires'), lieu=data.get('lieu'),id_personne=data.get('id_personne'))
-            member = Guest(horaires=tmp, lieu=data.get('lieu'), id_personne=data.get('id_personne'))
+            member = Guest(id=str(uuid.uuid4()), horaires=data.get('horaires'), lieu=data.get('lieu'), id_personne=data.get('id_personne'))
             print("member :")
+            print(type(data.get('horaires')))
             self._database_session.add(member)
             self._database_session.flush()
             print("flush")
