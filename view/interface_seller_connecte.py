@@ -30,10 +30,9 @@ class Ui_MainWindow(object):
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setGeometry(QtCore.QRect(290, 90, 121, 31))
         self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(self.del_article_function)
 
-        #self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        #self.pushButton_4.setGeometry(QtCore.QRect(290, 140, 121, 31))
-        #self.pushButton_4.setObjectName("pushButton_4")
+
 
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 20, 151, 16))
@@ -46,7 +45,6 @@ class Ui_MainWindow(object):
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(20, 210, 151, 16))
         self.label_2.setObjectName("label_2")
-        #MainWindow.setCentralWidget(self.centralwidget)
 
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
@@ -62,13 +60,14 @@ class Ui_MainWindow(object):
         self.index = 0
         for article in self.seller_database.list_article_from_seller(seller_id):
             if seller_id == article['id_seller']:
-                self.list_article_widget.insertItem( self.index, "* %s" % (
-                    article['name']))
-                self.member_mapping.append(article)
-                self.index += 1
+                if(article not in self.member_mapping):
+                    self.list_article_widget.insertItem( self.index, "* %s" % (
+                        article['name']))
+                    self.member_mapping.append(article)
+                    self.index += 1
+        print("MAPPIIIING")
+        print(self.member_mapping)
 
-        #self.list_article_widget.resize(self.list_article_widget.sizeHint())
-        #self.list_article_widget.move(0, 60)
         self.listlayout.addWidget(self.listwidget)
         self.layout.addLayout(self.listlayout)
 
@@ -88,10 +87,16 @@ class Ui_MainWindow(object):
                 }
         self.seller_database.add_article(data)
         self.add_article_window.close()
+        self.list_articles(self._id_personne)
 
-        self.list_article_widget.insertItem(self.index, "* %s" % (data['name']))
-        self.index += 1
-
+    def del_article_function(self):
+        try:
+            id_article = self.member_mapping[self.list_article_widget.currentRow()]['id']
+            item = self.list_article_widget.takeItem(self.list_article_widget.currentRow())
+            self.list_article_widget.removeItemWidget(item)
+            self.seller_database.delete_article(id_article)
+        except:
+            print("")
 
 
     def close_add_window(self):
@@ -102,6 +107,5 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton_2.setText(_translate("MainWindow", "Ajouter un article"))
         self.pushButton_3.setText(_translate("MainWindow", "Supprimer un article"))
-        #self.pushButton_4.setText(_translate("MainWindow", "Afficher les recettes"))
         self.label.setText(_translate("MainWindow", "Mes articles"))
         self.label_2.setText(_translate("MainWindow", "Recettes : 0 €"))

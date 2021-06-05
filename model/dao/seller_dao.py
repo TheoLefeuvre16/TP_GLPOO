@@ -71,3 +71,9 @@ class SellerDAO(DAO):
             return self._database_session.query(Article).filter_by(id_seller=id).order_by(Article.id).all()
         except NoResultFound:
             raise ResourceNotFound()
+
+    def delete(self, entity):
+        try:
+            self._database_session.delete(entity)
+        except SQLAlchemyError as e:
+            raise Error(str(e))
