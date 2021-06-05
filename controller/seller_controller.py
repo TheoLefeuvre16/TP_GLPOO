@@ -42,11 +42,13 @@ class SellerController:
             article_data = article.to_dict()
         return article_data
 
-    def delete_article(self, guest_id):
+    def delete_article(self, article_id):
         with self._database_engine.new_session() as session:
             article_dao = SellerDAO(session)
-            article = article_dao.get_id_article(guest_id)
+            article = article_dao.get_id_article(article_id)
             article_dao.delete(article)
+
+
 
     def create_seller(self, data_seller, data_personne):
         try:
