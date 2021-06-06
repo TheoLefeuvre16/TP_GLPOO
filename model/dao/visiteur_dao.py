@@ -30,11 +30,10 @@ class VisiteurDAO(DAO):
     def create(self, data: dict):
         try:
             data['id'] = str(uuid.uuid4())
-            print(data['id'])
             member = Visiteur(id=data.get('id'), age=data.get('age'), guest=data.get('guest'), stand=data.get('stand'), id_personne=data.get('id_personne'))
             self._database_session.add(member)
             self._database_session.flush()
-            print(member.to_dict())
+
         except IntegrityError:
             raise Error("Member already exists")
         return member

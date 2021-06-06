@@ -37,10 +37,10 @@ class PersonneDAO(DAO):
     def create(self, data: dict):
         try:
             member = Personne(id=str(uuid.uuid4()), firstname=data.get('firstname'), lastname=data.get('lastname'),age=data.get('age'), email=data.get('email'), statut=data.get('statut'), mdp=data.get("mdp"))
-            print("flush broken ?")
+
             self._database_session.add(member)
             self._database_session.flush()
-            print("ah non")
+
         except IntegrityError:
             raise Error("Member already exists")
         return member
