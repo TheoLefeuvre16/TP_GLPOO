@@ -38,6 +38,7 @@ class WindowManager:
         self.ui_connection = connection.Ui_MainWindow()
         self.ui_connection.setupUi(self.connection_widget)
         self.ui_connection.valider_connection.clicked.connect(self.valider_connexion)
+        self.ui_connection.error_user.setVisible(False)
         self.ui_connection.inscription.clicked.connect(self.Inscription_window)
         self.connection_widget.show()
 
@@ -177,10 +178,22 @@ class WindowManager:
         self.ui = acceuil.Ui_Form()
         self.ui.setupUi(self.main_widget)
         self.ui.submit.clicked.connect(self.Inscriptions_splitter)
+        self.ui.error_dupli.setVisible(False)
         self.main_widget.show()
+
 
     # redirection en fonction des  statuts
     def Inscriptions_splitter(self):
+
+        # check
+        db_visiteur = self.visiteur_database.list_visiteurs()
+        for member in db_visiteur:
+            nom = self.visiteur_database.get_guests(member['id_personne'])
+            if nom["email"]  == self.ui.email_input.text():
+                self.ui.error_dupli.setVisible(True)
+                return
+            else:
+                self.ui.error_dupli.setVisible(False)
 
         # Guest
         if self.ui.guest_choice.isChecked() is True:
@@ -218,7 +231,9 @@ class WindowManager:
     # fermeture fenetre inscription
     def close_inscription(self):
         #self.confirm_data_window.close()
-        self.guest_inscription_window.close()
+
+        if self.main_widget.isEnabled():
+            self.main_widget.close()
 
     # vendeur
     def submit_seller_inscription(self):
@@ -230,10 +245,9 @@ class WindowManager:
         self.data_pers["email"] = self.ui.email_input.text()
         self.data_pers["mdp"] = self.ui.mdp_input.text()
         self.data_pers["statut"] = self.statut_personne
-        self.seller_database.create_seller(self.data_seller, self.data_pers)
 
         self.seller_inscription_window.close()
-        self.main_widget.close()
+        self.close_inscription()
 
     #guest
     def submit_inscription(self):
@@ -252,9 +266,9 @@ class WindowManager:
         db = self.guest_database.list_guest()
 
         print(db)
-        self.close_inscription()
+
         self.guest_inscription_window.close()
-        self.main_widget.close()
+        self.close_inscription()
 
     #visiteur
     def submit_visiteur(self):
@@ -291,7 +305,7 @@ class WindowManager:
         self.visiteur_database.create_visiteur(self.data_visiteur, self.data_pers)
 
         self.visiteur_inscription_window.close()
-        self.main_widget.close()
+        self.close_inscription()
 
         print("tout roule")
 
@@ -312,6 +326,7 @@ class WindowManager:
     def valider_connexion(self):
 
         print(self.ui_connection.mail_input.text())
+        self.ui_connection.error_user.setVisible(False)
         mail_input = self.ui_connection.mail_input.text()
         mdp_input = self.ui_connection.mdp_input.text()
 
@@ -320,6 +335,7 @@ class WindowManager:
         #admin mode
         if "admin" == mail_input and "admin" == mdp_input:
             self.Mode_admin()
+            return
 
         # guest
         for member in db_guest:
@@ -327,6 +343,7 @@ class WindowManager:
             if nom['email'] == mail_input and nom['mdp'] == mdp_input:
                 print("connexion guest")
                 self.guest_window(horaire=member['horaires'], lieu=member['lieu'])
+                return
 
         #visiteur
         db_visiteur = self.visiteur_database.list_visiteurs()
@@ -340,6 +357,7 @@ class WindowManager:
                 self.ui_visiteur_connexion.setupUi(self.visiteur_connexion_window, self.visiteur_database)
                 print("setup ??")
                 self.visiteur_connexion_window.show()
+                return
 
         # vendeur
         db_seller = self.seller_database.list_sellers()
@@ -354,3 +372,6 @@ class WindowManager:
                 self.ui_seller_connexion.setupUi(self.seller_connexion_window,self.seller_database,id_personne)
                 print("setup ??")
                 self.seller_connexion_window.show()
+                return
+
+        self.ui_connection.error_user.setVisible(True)
