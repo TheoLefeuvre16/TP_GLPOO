@@ -23,27 +23,20 @@ class Ui_MainWindow(object):
 
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
-        print("guest - half setup")
         self.member_mapping = {}
         self.layout = QtWidgets.QHBoxLayout()
 
         self.list(visiteur_controller)
 
-
-        print("after list")
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def list(self, visiteur_controller):
-        print("call")
         index = 0
-        print(visiteur_controller.list_guests())
         for member in visiteur_controller.list_guests():
-            print(member['id_personne'])
             nom = visiteur_controller.get_guests(member['id_personne'])
             self.list_guest_widget.insertItem(index, "* %s - %s" % (
                 nom['firstname'], member['horaires']))
-            print("ici")
             self.member_mapping[index] = member
             index += 1
 
@@ -52,7 +45,6 @@ class Ui_MainWindow(object):
         self.list_guest_widget.move(0, 60)
         self.listlayout.addWidget(self.listwidget)
         self.layout.addLayout(self.listlayout)
-        print("on en sort")
 
 
     def retranslateUi(self, MainWindow):

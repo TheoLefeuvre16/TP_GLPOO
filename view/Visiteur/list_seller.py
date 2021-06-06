@@ -29,26 +29,24 @@ class Ui_MainWindow(object):
 
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
-        print("seller - half setup")
+
         self.member_mapping = {}
         self.layout = QtWidgets.QHBoxLayout()
 
         self.list()
 
-        print("after list")
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def list(self):
-        print("call")
         index = 0
-        print(self.database.list_seller())
+
         for member in self.database.list_seller():
-            print(member['id_personne'])
+
             nom = self.database.get_guests(member['id_personne'])
             self.list_seller_widget.insertItem(index, "* %s" % (
                 nom['firstname']))
-            print("ici")
+
             self.member_mapping[index] = member
             index += 1
 
@@ -57,12 +55,8 @@ class Ui_MainWindow(object):
         self.list_seller_widget.move(0, 60)
         self.listlayout.addWidget(self.listwidget)
         self.layout.addLayout(self.listlayout)
-        print("on en sort")
 
     def clicked(self):
-        print(self.list_seller_widget.currentRow())
-        print(self.member_mapping[self.list_seller_widget.currentRow()]['id'])
-        print("vendeur - test")
         self.test_w = QtWidgets.QWidget()
         self.ui_test = list_article.Ui_MainWindow()
         self.ui_test.setupUi(self.test_w, self.database, self.member_mapping[self.list_seller_widget.currentRow()]['id'])

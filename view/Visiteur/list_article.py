@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
     def list(self, seller_id):
         index = 0
         for article in self.visiteur_controller.list_article_from_seller(seller_id):
-            print(article['id_seller'])
+
             if seller_id == article['id_seller']:
                 if (article not in self.member_mapping and article['stock']>0):
                     self.list_article_widget.insertItem(index, "* %s - %s" % (
@@ -55,29 +55,26 @@ class Ui_MainWindow(object):
         self.layout.addLayout(self.listlayout)
 
     def update_list(self, id_article):
-        print("update:")
-        print(self.member_mapping)
+
         index = -1
         for i in range(0, len(self.member_mapping)):
             if(self.member_mapping[i]['id'] == id_article):
                 index = i
 
-        print(index)
+
         qitem = self.list_article_widget.item(index)
         item = qitem.text()
         tab = item.split("-")
         intv = int(tab[-1])-1
         if(intv > 0):
             string = tab[0]+ "- " + str(intv)
-            print(string)
+
             qitem.setText(string)
         else:
             self.del_article()
 
     def add(self):
         try:
-            #print(self.list_article_widget.currentRow())
-            #print(self.member_mapping[self.list_article_widget.currentRow()]['id'])
             self.visiteur_controller.add_to_cart(self.member_mapping[self.list_article_widget.currentRow()]['name'], 1)
             self.update_list(self.member_mapping[self.list_article_widget.currentRow()]['id'])
         except:

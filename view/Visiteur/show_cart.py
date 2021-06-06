@@ -36,23 +36,21 @@ class Ui_MainWindow(object):
 
         self.listlayout = QtWidgets.QGridLayout()
         self.listwidget = QtWidgets.QListWidget()
-        print("cart - half setup")
+
         self.member_mapping = {}
         self.layout = QtWidgets.QHBoxLayout()
 
         self.list()
 
-        print("after list")
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def list(self):
-        print("call")
+
         index = 0
 
         for article in self.visiteur_controller.show_cart():
-            print(article[0])
-            print(article[1])
 
             self.list_article_widget.insertItem(index, "* %s %d" % (
                 article[0], article[1]))
@@ -66,7 +64,6 @@ class Ui_MainWindow(object):
 
     def remove(self):
         index = 0
-        print(self.member_mapping[self.list_article_widget.currentRow()][0])
         nom = self.member_mapping[self.list_article_widget.currentRow()][0]
         for i in range(len(self.visiteur_controller.panier)):
             if nom == self.visiteur_controller.panier[i][0]:

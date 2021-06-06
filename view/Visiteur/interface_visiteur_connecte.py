@@ -8,7 +8,6 @@ from view.Visiteur import list_seller, list_guest, show_cart
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, visiteur_database):
-        print("setup vendeur visiteur test")
         self.visiteur_database = visiteur_database
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(276, 268)

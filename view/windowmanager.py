@@ -79,7 +79,7 @@ class WindowManager:
         self.main_widget = accueil_admin.QtWidgets.QWidget()
         self.ui_admin = accueil_admin.Ui_Form()
         self.ui_admin.setupUi(self.main_widget)
-        print("issou2)")
+
         self.ui_admin.list_visiteur.clicked.connect(self.Print_visiteur_window)
         self.ui_admin.list_seller.clicked.connect(self.Print_seller_window)
         self.ui_admin.list_guest.clicked.connect(self.Print_guest_window)
@@ -215,15 +215,15 @@ class WindowManager:
 
         # Visiteur
         if self.ui.visiteur_choice.isChecked() is True:
-            print("select visiteur")
+
             self.statut_personne = "visiteur"
             #ouvrir une fenêtre de choix de billet
             self.visiteur_inscription_window = QtWidgets.QWidget()
             self.ui_visiteur = billetterie.Ui_MainWindow()
-            print("print")
+
             self.ui_visiteur.setupUi(self.visiteur_inscription_window)
             self.ui_visiteur.valid_ticket.clicked.connect(self.submit_visiteur)
-            print("setup ??")
+
             self.visiteur_inscription_window.show()
 
 
@@ -264,19 +264,13 @@ class WindowManager:
         self.guest_database.create_guest(self.data_guest, self.data_pers)
         db = self.guest_database.list_guest()
 
-        print(db)
-
         self.guest_inscription_window.close()
         self.close_inscription()
 
     #visiteur
     def submit_visiteur(self):
-        print("submit visiteur")
-        print("index : ", self.ui_visiteur.comboBox_billets.currentIndex())
 
-        print(int(self.ui.comboBox.currentText()))
         if int(self.ui.comboBox.currentText()) <= 18 and self.ui_visiteur.comboBox_billets.currentIndex() == 0:
-            print("ticket -18")
             self.data_visiteur["age"] = "0"
             self.data_visiteur["stand"] = "1"
             self.data_visiteur["guest"] = "1"
@@ -292,9 +286,7 @@ class WindowManager:
             self.data_visiteur["age"] = "1"
             self.data_visiteur["stand"] = "1"
             self.data_visiteur["guest"] = "1"
-        print("toprint")
-        print("age " + self.data_visiteur["age"])
-        print(" guest " + self.data_visiteur["guest"] + " stand " + self.data_visiteur["stand"])
+
         self.data_pers["firstname"] = self.ui.prenom_input.text()
         self.data_pers["lastname"] = self.ui.nom_input.text()
         self.data_pers["age"] = self.ui.comboBox.currentText()
@@ -306,7 +298,6 @@ class WindowManager:
         self.visiteur_inscription_window.close()
         self.close_inscription()
 
-        print("tout roule")
 
     # PAGE GUEST
     def guest_window(self , horaire, lieu):
@@ -324,7 +315,7 @@ class WindowManager:
     # PAGE CONNECTION
     def valider_connexion(self):
 
-        print(self.ui_connection.mail_input.text())
+
         self.ui_connection.error_user.setVisible(False)
         mail_input = self.ui_connection.mail_input.text()
         mdp_input = self.ui_connection.mdp_input.text()
@@ -340,7 +331,7 @@ class WindowManager:
         for member in db_guest:
             nom = self.guest_database.get_person(member['id_personne'])
             if nom['email'] == mail_input and nom['mdp'] == mdp_input:
-                print("connexion guest")
+
                 self.guest_window(horaire=member['horaires'], lieu=member['lieu'])
                 return
 
@@ -349,12 +340,12 @@ class WindowManager:
         for member in db_visiteur:
             nom = self.visiteur_database.get_guests(member['id_personne'])
             if nom['email'] == mail_input  and nom['mdp'] == mdp_input:
-                print("connexion visiteur")#call la fonction de connexion
+
                 self.visiteur_connexion_window = QtWidgets.QWidget()
                 self.ui_visiteur_connexion = interface_visiteur_connecte.Ui_MainWindow()
-                print("print")
+
                 self.ui_visiteur_connexion.setupUi(self.visiteur_connexion_window, self.visiteur_database)
-                print("setup ??")
+
                 self.visiteur_connexion_window.show()
                 return
 
@@ -364,12 +355,12 @@ class WindowManager:
             nom = self.visiteur_database.get_guests(member['id_personne'])
             if nom['email'] == mail_input  and nom['mdp'] == mdp_input:
                 id_personne = member['id']
-                print(id_personne)
+
                 self.seller_connexion_window = QtWidgets.QWidget()
                 self.ui_seller_connexion = interface_seller_connecte.Ui_MainWindow()
-                print("print")
+
                 self.ui_seller_connexion.setupUi(self.seller_connexion_window,self.seller_database,id_personne)
-                print("setup ??")
+
                 self.seller_connexion_window.show()
                 return
 

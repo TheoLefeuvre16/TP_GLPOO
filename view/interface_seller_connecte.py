@@ -65,8 +65,7 @@ class Ui_MainWindow(object):
                         article['name'], article['stock']))
                     self.member_mapping.append(article)
                     self.index += 1
-        print("MAPPIIIING")
-        print(self.member_mapping)
+
 
         self.listlayout.addWidget(self.listwidget)
         self.layout.addLayout(self.listlayout)
