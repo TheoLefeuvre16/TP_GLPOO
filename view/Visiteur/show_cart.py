@@ -26,10 +26,10 @@ class Ui_MainWindow(object):
         self.valid_article_button.setGeometry(QtCore.QRect(130, 270, 91, 23))
         self.valid_article_button.setObjectName("valid_article_button")
         self.valid_article_button.clicked.connect(self.validate_cart)
-        self.valid_article_button.move(100,300)
+        self.valid_article_button.move(120,300)
 
         self.remove_article_button = QtWidgets.QPushButton(self.centralwidget)
-        self.remove_article_button.setGeometry(QtCore.QRect(130, 270, 91, 23))
+        self.remove_article_button.setGeometry(QtCore.QRect(130, 270, 115, 23))
         self.remove_article_button.setObjectName("remove_article_button")
         self.remove_article_button.move(0,300)
         self.remove_article_button.clicked.connect(self.remove)
@@ -40,13 +40,13 @@ class Ui_MainWindow(object):
         self.member_mapping = {}
         self.layout = QtWidgets.QHBoxLayout()
 
-        self.list(visiteur_controller)
+        self.list()
 
         print("after list")
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def list(self, seller_id):
+    def list(self):
         print("call")
         index = 0
 
@@ -65,9 +65,16 @@ class Ui_MainWindow(object):
         self.layout.addLayout(self.listlayout)
 
     def remove(self):
-        self.visiteur_controller.remove_from_cart(self.member_mapping[self.list_article_widget.currentRow()]['name'], 1)
+        index = 0
+        print(self.member_mapping[self.list_article_widget.currentRow()][0])
+        nom = self.member_mapping[self.list_article_widget.currentRow()][0]
+        for i in range(len(self.visiteur_controller.panier)):
+            if nom == self.visiteur_controller.panier[i][0]:
+                index = i
+        self.visiteur_controller.remove_from_cart(index, 1)
         #remove row
-        self.list_article_widget.removeItemWidget(self.list_article_widget.currentItem())
+        self.list_article_widget.clear()
+        self.list()
 
     def validate_cart(self):
         self.visiteur_controller.validate_cart()

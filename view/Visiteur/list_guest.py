@@ -41,8 +41,8 @@ class Ui_MainWindow(object):
         for member in visiteur_controller.list_guests():
             print(member['id_personne'])
             nom = visiteur_controller.get_guests(member['id_personne'])
-            self.list_guest_widget.insertItem(index, "* %s" % (
-                nom['firstname']))
+            self.list_guest_widget.insertItem(index, "* %s - %s" % (
+                nom['firstname'], member['horaires']))
             print("ici")
             self.member_mapping[index] = member
             index += 1
