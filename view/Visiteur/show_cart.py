@@ -63,15 +63,18 @@ class Ui_MainWindow(object):
         self.layout.addLayout(self.listlayout)
 
     def remove(self):
-        index = 0
-        nom = self.member_mapping[self.list_article_widget.currentRow()][0]
-        for i in range(len(self.visiteur_controller.panier)):
-            if nom == self.visiteur_controller.panier[i][0]:
-                index = i
-        self.visiteur_controller.remove_from_cart(index, 1)
-        #remove row
-        self.list_article_widget.clear()
-        self.list()
+        index = -1
+        try:
+            nom = self.member_mapping[self.list_article_widget.currentRow()][0]
+            for i in range(len(self.visiteur_controller.panier)):
+                if nom == self.visiteur_controller.panier[i][0]:
+                   index = i
+            self.visiteur_controller.remove_from_cart(index, 1)
+            #remove row
+            self.list_article_widget.clear()
+            self.list()
+        except:
+            print("")
 
     def validate_cart(self):
         self.visiteur_controller.validate_cart()
