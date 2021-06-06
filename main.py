@@ -19,8 +19,8 @@ guest_database = guest_controller.GuestController(database_engine)
 visiteur_database = visiteur_controller.VisiteurController(database_engine)
 seller_database = SellerController(database_engine)
 admin_database = admin_controller.AdminController(database_engine)
-main_app = connection.QtWidgets.QApplication(sys.argv)
 
+main_app = connection.QtWidgets.QApplication(sys.argv)
 main_window = WindowManager(guest_database, visiteur_database,seller_database, admin_database)
 
 exit(main_app.exec_())

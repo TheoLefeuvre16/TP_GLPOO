@@ -1,10 +1,9 @@
 import json
-import schedule
 from view.Visiteur import billetterie
 from PyQt5 import QtWidgets
 from view import interface_seller_connecte
 from view.assets import list_vendeur, guest_inscription, list_recette, list_stand, accueil_admin, list_invite, \
-    connection, acceuil, seller_confirmation, list_visiteur, guest_window
+    connection, acceuil, seller_confirmation, list_visiteur, guest_window, schedule
 from view.Visiteur import interface_visiteur_connecte
 
 
@@ -245,7 +244,7 @@ class WindowManager:
         self.data_pers["email"] = self.ui.email_input.text()
         self.data_pers["mdp"] = self.ui.mdp_input.text()
         self.data_pers["statut"] = self.statut_personne
-
+        self.seller_database.create_seller(self.data_seller,self.data_pers)
         self.seller_inscription_window.close()
         self.close_inscription()
 
