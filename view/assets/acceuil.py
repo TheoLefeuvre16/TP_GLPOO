@@ -35,7 +35,7 @@ class Ui_Form(object):
         self.vendeur_choice.setGeometry(QtCore.QRect(350, 250, 81, 21))
         self.vendeur_choice.setObjectName("vendeur_choice")
         self.label_4 = QtWidgets.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(70, 220, 81, 16))
+        self.label_4.setGeometry(QtCore.QRect(70, 220, 101, 16))
         self.label_4.setObjectName("label_4")
         self.nom_input = QtWidgets.QLineEdit(Form)
         self.nom_input.setGeometry(QtCore.QRect(70, 190, 113, 16))
