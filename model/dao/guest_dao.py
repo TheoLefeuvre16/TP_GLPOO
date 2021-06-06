@@ -45,14 +45,11 @@ class GuestDAO(DAO):
         print("call create")
         try:
 
-            #member = Guest(horaires=data.get('horaires'), lieu=data.get('lieu'),id_personne=data.get('id_personne'))
             member = Guest(id=str(uuid.uuid4()), horaires=data.get('horaires'), lieu=data.get('lieu'), id_personne=data.get('id_personne'))
-            print("member :")
-            print(type(data.get('horaires')))
+
             self._database_session.add(member)
             self._database_session.flush()
-            print("flush")
-            print(member.to_dict())
+
         except IntegrityError:
             raise Error("Member already exists")
         return member
