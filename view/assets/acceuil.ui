@@ -62,7 +62,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Guest</string>
+    <string>Invité</string>
    </property>
   </widget>
   <widget class="QRadioButton" name="vendeur_choice">

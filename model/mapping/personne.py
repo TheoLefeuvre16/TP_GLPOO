@@ -7,7 +7,7 @@ from sqlalchemy import Column, String, UniqueConstraint , Integer
 
 class Personne(Base):
     __tablename__ = 'personne'
-    __table_args__ = (UniqueConstraint('firstname', 'lastname'),)
+    __table_args__ = (UniqueConstraint('email'),)
 
     id = Column(String(36), default=str(uuid.uuid4()), primary_key=True)
 

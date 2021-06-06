@@ -46,7 +46,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Guest</string>
+    <string>invité</string>
    </property>
   </widget>
   <widget class="QPushButton" name="precedent_button">

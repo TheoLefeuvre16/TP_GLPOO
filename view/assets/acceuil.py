@@ -228,7 +228,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Inscription"))
         self.email_input.setText(_translate("Form", "ex : xyz@gmail.com"))
-        self.guest_choice.setText(_translate("Form", "Guest"))
+        self.guest_choice.setText(_translate("Form", "Invité"))
         self.vendeur_choice.setText(_translate("Form", "Vendeur"))
         self.label_4.setText(_translate("Form", "Adresse e-mail"))
         self.nom_input.setText(_translate("Form", "ex : Olivier"))
