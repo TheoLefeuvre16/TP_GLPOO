@@ -28,20 +28,18 @@ class GuestController(PersonneController):
         return guest_data
 
     def create_guest(self, data_guest, data_personne):
-        print("entering create_guest")
-       # self._check_profile_data(data)
+
         try:
             with self._database_engine.new_session() as session:
                 # Save member in database
-                print("with ok")
+
                 personne = PersonneDAO(session).create(data_personne)
                 personne_data = personne.to_dict()
-                print(personne_data)
+
                 data_guest['id_personne'] = personne_data.get('id')
                 guest = GuestDAO(session).create(data_guest)
                 guest_data = guest.to_dict()
-                print(guest_data)
-                print("exiting create_guest")
+
                 return guest_data
         except Error as e:
             # log error

@@ -15,7 +15,7 @@ class SellerController:
     def add_article(self,data):
         try:
             with self._database_engine.new_session() as session:
-                print("ajout article controler")
+
                 article = SellerDAO(session).create_article(data)
                 article_data = article.to_dict()
 
@@ -57,9 +57,9 @@ class SellerController:
                 personne_data = personne.to_dict()
 
                 data_seller['id_personne'] = personne_data.get('id')
-                print(personne_data.get('id'))
+
                 seller = SellerDAO(session).create_seller(data_seller)
-                print("apres create seller")
+
                 seller_data = seller.to_dict()
                 return seller_data
         except Error as e:
